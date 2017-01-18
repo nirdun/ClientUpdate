@@ -25,17 +25,6 @@ std::string BCASTPacket::getFileName() {
     return Filename;
 }
 
-void BCASTPacket::setFilename(const std::string &filename) {
-    Filename = filename;
-}
-
-bool BCASTPacket::isFileAdded() {
-    return fileAdded;
-}
-
-void BCASTPacket::setFileAdded(bool fileAdded) {
-    this->fileAdded = fileAdded;
-}
 
 
 void BCASTPacket::printMessage() {

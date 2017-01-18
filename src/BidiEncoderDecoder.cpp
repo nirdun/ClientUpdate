@@ -10,7 +10,7 @@
 #include "../include/Packets/ERRORPacket.h"
 #include "../include/BidiEncoderDecoder.h"
 #include "../include/Packets/BCASTPacket.h"
-#include <Boost/algorithm/string/split.hpp>
+//#include <Boost/algorithm/string/split.hpp>
 #include <Boost/algorithm/string/classification.hpp>
 #include <boost/lexical_cast.hpp>
 
