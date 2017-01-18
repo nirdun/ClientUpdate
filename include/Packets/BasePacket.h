@@ -7,13 +7,13 @@ protected:
     short opCode = 0;
     std::vector<char> bytyarr;
 public:
-    virtual short getOpCode();
+     short getOpCode();
 
     BasePacket(std::vector<char> &bytes);
 
     BasePacket();
 
-    virtual bool haveEndByte();
+     bool haveEndByte();
 
-    virtual void setOpCode(short opCode);
+     void setOpCode(short opCode);
 };

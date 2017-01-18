@@ -36,8 +36,8 @@ public:
 
     std::string getFileName();
     ConnectionHandler(const ConnectionHandler &handler);
-    void setCurrentAction(int currentAction);
-    int getCurrentAction() ;
+    void setCurrentAction(short currentAction);
+    short getCurrentAction() ;
     //int getCurrentActionNum(std::string currentAction);
 
     ConnectionHandler(std::string host, short port);
@@ -58,7 +58,7 @@ public:
 
     void terminate();
 
-    virtual ~ConnectionHandler();
+     ~ConnectionHandler();
 
     // Connect to the remote machine
     bool connect();

@@ -246,7 +246,7 @@ std::string BidiEncoderDecoder::getFileName() {
 ////        return dPacket;
 ////    }
 ////
-////    virtual BasePacket *createPacket(short opCode, std::vector<char> &bytes) {
+////     BasePacket *createPacket(short opCode, std::vector<char> &bytes) {
 ////        BasePacket *packet = nullptr;
 ////        switch (opCode) {
 ////            //Read request.
@@ -299,7 +299,7 @@ std::string BidiEncoderDecoder::getFileName() {
 ////    }
 ////
 ////
-////    virtual std::string bytesArrToString(std::vector<char> &bytes) {
+////     std::string bytesArrToString(std::vector<char> &bytes) {
 ////        //notice that we explicitly requesting that the string will be decoded from UTF-8
 ////        //this is not actually required as it is the default encoding in java.
 ////        std::string result = std::string(bytes, 0, bytes.size(), StandardCharsets::UTF_8);
@@ -346,7 +346,7 @@ std::string BidiEncoderDecoder::getFileName() {
 //
 //
 //
-////    virtual std::vector<char> encodeACK(ACKPacket *packet) {
+////     std::vector<char> encodeACK(ACKPacket *packet) {
 ////        std::vector<char> opCodeByte = shortToBytes(opCode);
 ////        std::vector<char> blockBytes = shortToBytes(packet->getBlockNum());
 ////
@@ -376,13 +376,13 @@ std::string BidiEncoderDecoder::getFileName() {
 //        return mergeArrays({opCodeByte, errorCode, errorMsg, endByte});
 //
 //
-//    virtual short getOpCode(std::vector<char> &byteArr) {
+//     short getOpCode(std::vector<char> &byteArr) {
 //        short result = static_cast<short>((byteArr[0] & 0xff) << 8);
 //        result += static_cast<short>(byteArr[1] & 0xff);
 //        return result;
 //    }
 //
-//    virtual std::vector<char> shortToBytes(short num) {
+//     std::vector<char> shortToBytes(short num) {
 //        std::vector<char> bytesArr(2);
 //        bytesArr[0] = static_cast<char>((num >> 8) & 0xFF);
 //        bytesArr[1] = static_cast<char>(num & 0xFF);
@@ -390,7 +390,7 @@ std::string BidiEncoderDecoder::getFileName() {
 //    }
 //
 //
-//    virtual short bytesToShort(std::vector<char> &byteArr) {
+//     short bytesToShort(std::vector<char> &byteArr) {
 //        short result = static_cast<short>((byteArr[0] & 0xff) << 8);
 //        result += static_cast<short>(byteArr[1] & 0xff);
 //        return result;

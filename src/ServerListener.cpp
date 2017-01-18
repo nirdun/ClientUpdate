@@ -39,7 +39,7 @@ void ServerListener::run() {
 }
 
 void ServerListener::createResponse(BasePacket *packetFromServer) {
-    int currentAct = _handler.getCurrentAction();
+    short currentAct = _handler.getCurrentAction();
     switch (packetFromServer->getOpCode()) {
         //DATA
         case 3: {

@@ -18,15 +18,15 @@ public:
     BCASTPacket(const std::string &filename);
 
     //todo initiailize while getting bytes.
-    virtual std::string getFileName();
+     std::string getFileName();
 
-    virtual void setFilename(const std::string &filename);
+     void setFilename(const std::string &filename);
 
-    virtual bool isFileAdded();
+     bool isFileAdded();
 
-    virtual void setFileAdded(bool fileAdded);
+     void setFileAdded(bool fileAdded);
 
-    virtual bool haveEndByte() override;
+     bool haveEndByte() override;
 
     void printMessage();
 };

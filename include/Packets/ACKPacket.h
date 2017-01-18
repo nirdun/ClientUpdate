@@ -13,7 +13,7 @@ public:
 
     ACKPacket(short blockNum);
 
-    virtual short getBlockNum();
+     short getBlockNum();
 
     void printACK();
 };

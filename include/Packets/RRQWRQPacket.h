@@ -15,13 +15,13 @@ public:
 
     RRQWRQPacket(std::vector<char> &bytes, short opCode, const std::string &fileName);
 
-    virtual std::string getFileName();
+     std::string getFileName();
 
-    virtual void setFileName(const std::string &fileName);
+     void setFileName(const std::string &fileName);
 
-    virtual wchar_t getEndByte();
+     wchar_t getEndByte();
 
-    virtual void setEndByte(wchar_t endByte);
+     void setEndByte(wchar_t endByte);
 
-    virtual bool haveEndByte() override;
+     bool haveEndByte() override;
 };

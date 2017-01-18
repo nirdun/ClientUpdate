@@ -70,11 +70,11 @@ bool ConnectionHandler::isUploading() {
     return _waitingForDataAck == 1;
 }
 
-int ConnectionHandler::getCurrentAction() {
+short ConnectionHandler::getCurrentAction() {
     return _currentAction;
 }
 
-void ConnectionHandler::setCurrentAction(int currentAction) {
+void ConnectionHandler::setCurrentAction(short currentAction) {
     _currentAction = currentAction;
 }
 
@@ -198,7 +198,6 @@ BasePacket *ConnectionHandler::processServerPakect() {
 
     BasePacket *packetFromServer;
 
-    char *bytes;
     switch (opCode) {
         //DATA
         case 3: {

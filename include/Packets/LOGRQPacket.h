@@ -13,13 +13,13 @@ public:
 
     LOGRQPacket();
 
-    virtual std::string getUserName();
+     std::string getUserName();
 
-    virtual void setUserName(const std::string &userName);
+     void setUserName(const std::string &userName);
 
-    virtual wchar_t getEndByte();
+     wchar_t getEndByte();
 
-    virtual void setEndByte(wchar_t endByte);
+     void setEndByte(wchar_t endByte);
 
-    virtual bool haveEndByte() override;
+     bool haveEndByte() override;
 };

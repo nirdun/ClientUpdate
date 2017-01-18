@@ -26,19 +26,19 @@ public:
 
     short getPacketSize();
 
-    virtual void setPacketSize(short packetSize);
+     void setPacketSize(short packetSize);
 
-    virtual short getBlockNum();
+     short getBlockNum();
 
-    virtual void setBlockNum(short blockNum);
+     void setBlockNum(short blockNum);
 
     char* getData();
 
-    virtual void setData(std::vector<char> &data);
+     void setData(std::vector<char> &data);
 
-    virtual std::string getFileName();
+     std::string getFileName();
 
-    virtual void setFileName(const std::string &fileName);
+     void setFileName(const std::string &fileName);
 
     void printDirListing();
 };

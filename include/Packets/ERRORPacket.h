@@ -18,24 +18,24 @@ private:
     void difineErrMsg();
 
 public:
-    virtual bool haveEndByte() override;
+     bool haveEndByte() override;
 
 
-    virtual std::string getErrMsg();
+     std::string getErrMsg();
 
-    virtual void setErrMsg(const std::string &errMsg);
+     void setErrMsg(const std::string &errMsg);
 
-    virtual short getEndByte();
+     short getEndByte();
 
-    virtual void setEndByte(short endByte);
+     void setEndByte(short endByte);
 
-    virtual int getErrorType();
+     int getErrorType();
 
-    virtual void setErrorType(short errorType);
+     void setErrorType(short errorType);
 
-    virtual short getErrorCode();
+     short getErrorCode();
 
-    virtual void setErrorCode(short errorCode);
+     void setErrorCode(short errorCode);
 
     void printError();
 };
