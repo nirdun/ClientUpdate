@@ -1,14 +1,30 @@
 //
-// Created by ניר דוניץ on 18.1.2017.
+// Created by ניר דוניץ on 15.1.2017.
 //
 
-#ifndef CLIENTASS3_KEYBOARDLISTENER_H
-#define CLIENTASS3_KEYBOARDLISTENER_H
+#ifndef CLIENT_KEYBOARDLISTENER_H
+#define CLIENT_KEYBOARDLISTENER_H
+
+#include <boost/thread.hpp>
+#include "ConnectionHandler.h"
+
+class KeyboardListener {
+private:
+    std::string _listenerType;
+    ConnectionHandler &_handler;
+    const short _bufferSize;
 
 
-class KeyBoardListener {
+
+public:
+    KeyboardListener(ConnectionHandler &handler);
+
+    void run();
 
 };
 
+#include <iostream>
+#include <boost/thread.hpp>
 
-#endif //CLIENTASS3_KEYBOARDLISTENER_H
+
+#endif //CLIENT_KEYBOARDLISTENER_H
