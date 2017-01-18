@@ -14,6 +14,9 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <string.h>
+#include <iterator>
+#include <algorithm>
 
 using namespace std;
 
@@ -106,8 +109,8 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
 
     std::vector<std::string> lineSplited;
     istringstream iss(line);
-    copy(istream_iterator<string>(iss),
-         istream_iterator<string>(),
+    copy(std::istream_iterator<std::string>(iss),
+         std::istream_iterator<std::string>(),
          back_inserter(lineSplited));
     char *bytes;
     switch (opCodeMap.at(lineSplited.at(0))) {
