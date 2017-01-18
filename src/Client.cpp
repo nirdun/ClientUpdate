@@ -2,7 +2,7 @@
 #include <iostream>
 #include <boost/thread.hpp>
 #include "../include/ConnectionHandler.h"
-#include "../include/keyBoardListener.h"
+#include "../include/KeyBoardListener.h"
 #include "../include/ServerListener.h"
 
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
 
     ConnectionHandler handler(host,port);
-    keyBoardListener keyBoardListener(handler);
+    KeyBoardListener KeyBoardListener(handler);
     ServerListener serverListener(handler);
 
     if (!handler.connect()) {
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    boost::thread th1(&keyBoardListener::run, &keyBoardListener);
+    boost::thread th1(&KeyBoardListener::run, &KeyBoardListener);
     boost::thread th2(&ServerListener::run, &serverListener);
 //    th1.join();
 //    th2.join();
