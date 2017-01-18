@@ -36,8 +36,8 @@ int main(int argc, char *argv[]) {
 
     boost::thread th1(&KeyBoardListener::run, &KeyBoardListener);
     boost::thread th2(&ServerListener::run, &serverListener);
-//    th1.join();
-//    th2.join();
+    th1.join();
+    th2.join();
     cout<<"Client is closed"<<endl;
     return 0;
 }

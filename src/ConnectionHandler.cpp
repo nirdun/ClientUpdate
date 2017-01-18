@@ -110,7 +110,10 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
     boost::system::error_code error;
     try {
         while (!error && bytesToWrite > tmp) {
+            std::cout << "inside sending bytes while loop"<<std::endl;
+
             tmp += socket_.write_some(boost::asio::buffer(bytes + tmp, bytesToWrite - tmp), error);
+            std::cout << "wrote something to server"<<std::endl;
         }
         if (error)
             throw boost::system::system_error(error);
@@ -164,10 +167,15 @@ void ConnectionHandler::close() {
 //}
 
 bool ConnectionHandler::encodeAndSend(std::string line) {
+    std::cout << "inside encode and send(connection handle)"<<std::endl;
     //todo sync?
     char *packetBytes = encoderDecoder->encodeInputTobytes(line);
+    std::cout << "packet was created in char array"<<std::endl;
+
     //todo check if LogIn Is the First Packet to send
     updateCurrentAction(packetBytes);
+    std::cout << "before send bytes"<<std::endl;
+
     return sendBytes(packetBytes, strlen(packetBytes));
 
 }
@@ -271,5 +279,10 @@ std::string ConnectionHandler::getFileName(){
 
 
 void ConnectionHandler::updateCurrentAction(char *bytes) {
+    std::cout << "inside updateCurrentAction"<<std::endl;
+
     _currentAction=encoderDecoder->bytesToShort(bytes[0],bytes[1]);
+    std::cout << "after updateCurrentAction"<<std::endl;
+
+
 }

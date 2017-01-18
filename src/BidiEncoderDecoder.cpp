@@ -144,6 +144,8 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
             break;
             //LOGRQ
         case 7:
+            std::cout << "inside logrq"<<std::endl;
+
             this->userName = lineSplited.at(1);
             bytes = new char[this->userName.length() + 3];
             shortToBytes(7, bytes);
