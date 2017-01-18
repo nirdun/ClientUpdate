@@ -95,7 +95,8 @@ void BidiEncoderDecoder::shortToBytes(short num, char *bytesArr) {
 }
 
 char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
-
+    std::cout << "inside encodeInputTobytes"<<std::endl;
+    opCodeMap.clear();
     opCodeMap["RRQ"] = 1;
     opCodeMap["WRQ"] = 2;
     opCodeMap["DATA"] = 3;
@@ -112,6 +113,8 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     copy(std::istream_iterator<std::string>(iss),
          std::istream_iterator<std::string>(),
          back_inserter(lineSplited));
+    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
+
     char *bytes;
     switch (opCodeMap.at(lineSplited.at(0))) {
         //RRQ
