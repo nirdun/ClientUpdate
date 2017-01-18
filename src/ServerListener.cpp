@@ -24,11 +24,15 @@ using namespace std;
 
 ServerListener::ServerListener(ConnectionHandler &handler) :
         _handler(handler),
-        _listenerType("server") {}
+        _listenerType("server") {
+    std::cout << "c_tor server listener"<<std::endl;
+
+}
 
 void ServerListener::run() {
     BidiEncoderDecoder *encoderDecoder;
     while (!_handler.shouldTerminate()) {
+        std::cout << "inside while server listener"<<std::endl;
         BasePacket *packetFromServer;
 
         packetFromServer = _handler.processServerPakect();

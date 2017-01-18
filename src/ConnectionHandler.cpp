@@ -77,6 +77,7 @@ bool ConnectionHandler::connect() {
     try {
         tcp::endpoint endpoint(boost::asio::ip::address::from_string(host_), port_); // the server endpoint
         boost::system::error_code error;
+        std::cout << "trying to connect to socket"<<std::endl;
         socket_.connect(endpoint, error);
         if (error)
             throw boost::system::system_error(error);
@@ -196,7 +197,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
             char *data = new char[packetSize];
             getBytes(data, packetSize);
             char *packetToEncode = new char[packetSize + 6];
-            mergeArrays(packetToEncode, opCodeArr, 0);
+            this->mergeArrays(packetToEncode, opCodeArr, 0);
             mergeArrays(packetToEncode, packetSizeArr, 2);
             mergeArrays(packetToEncode, packetBlock, 4);
             mergeArrays(packetToEncode, packetBlock, 6);
@@ -244,7 +245,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
 }
 
 
-void mergeArrays(char *insertTo, char *insertFrom, int from) {
+void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom, int from) {
     for (unsigned int i = from; i < from + strlen(insertFrom); i++) {
         insertTo[i] = insertFrom[i - from];
     }
