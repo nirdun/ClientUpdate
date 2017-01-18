@@ -4,19 +4,16 @@
 
 
 #include "../include/Packets/BasePacket.h"
-#include "../include/Packets/DIRQPacket.h"
-#include "../include/Packets/DISCPacket.h"
 #include "../include/Packets/ACKPacket.h"
 #include "../include/Packets/ERRORPacket.h"
 #include "../include/BidiEncoderDecoder.h"
 #include "../include/Packets/BCASTPacket.h"
-//#include <Boost/algorithm/string/split.hpp>
-#include <Boost/algorithm/string/classification.hpp>
-#include <boost/lexical_cast.hpp>
+
 
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -134,7 +131,6 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         case 4:
             bytes = new char[4];
             shortToBytes(4, bytes);
-//            short block = boost::lexical_cast<short>(lineSplited.at(1));
             addStringToBytes(lineSplited.at(1), bytes, 2);
 
             break;
