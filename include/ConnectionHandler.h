@@ -18,7 +18,6 @@ class ConnectionHandler {
 private:
     std::string _host;
     short _port;
-    int _waitingForDataAck;
     short _currentAction;
     bool _connected;
     const std::string host_;
@@ -49,12 +48,6 @@ public:
 
 
     BasePacket *processServerPakect();
-
-    void waitingForDataAck();
-
-    bool isUploading();
-
-    void dataAckAccepted();
 
     void terminate();
 

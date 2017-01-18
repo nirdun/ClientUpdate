@@ -17,11 +17,8 @@ ConnectionHandler::ConnectionHandler(string host, short port) :
         port_(port),
         io_service_(),
         socket_(io_service_),
-        _waitingForDataAck(0),
         _currentAction(0),
-        _connected(true) {
-
-    encoderDecoder = new BidiEncoderDecoder();
+        _connected(true),encoderDecoder() {
     currentActionMap["regular"]=1;
     currentActionMap["download"]=2;
     currentActionMap["upload"]=3;
@@ -35,9 +32,7 @@ ConnectionHandler::ConnectionHandler(ConnectionHandler& connectionHandler) :
         io_service_(),
         socket_(io_service_),
         _currentAction(0),
-        _connected(true) {
-
-    encoderDecoder = new BidiEncoderDecoder();
+        _connected(true),encoderDecoder() {
     currentActionMap["regular"]=1;
     currentActionMap["download"]=2;
     currentActionMap["upload"]=3;
@@ -58,17 +53,6 @@ bool ConnectionHandler::shouldTerminate() {
     return !_connected;
 }
 
-void ConnectionHandler::dataAckAccepted() {
-    _waitingForDataAck--;
-}
-
-void ConnectionHandler::waitingForDataAck() {
-    _waitingForDataAck++;
-}
-
-bool ConnectionHandler::isUploading() {
-    return _waitingForDataAck == 1;
-}
 
 short ConnectionHandler::getCurrentAction() {
     return _currentAction;
@@ -261,7 +245,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
 
 
 void mergeArrays(char *insertTo, char *insertFrom, int from) {
-    for (int i = from; i < from + strlen(insertFrom); i++) {
+    for (unsigned int i = from; i < from + strlen(insertFrom); i++) {
         insertTo[i] = insertFrom[i - from];
     }
 
