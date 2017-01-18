@@ -23,6 +23,3 @@ void RRQWRQPacket::setEndByte(wchar_t endByte) {
     this->endByte = endByte;
 }
 
-bool RRQWRQPacket::haveEndByte() {
-    return true;
-}

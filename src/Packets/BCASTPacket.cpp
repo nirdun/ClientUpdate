@@ -37,9 +37,6 @@ void BCASTPacket::setFileAdded(bool fileAdded) {
     this->fileAdded = fileAdded;
 }
 
-bool BCASTPacket::haveEndByte() {
-    return true;
-}
 
 void BCASTPacket::printMessage() {
     std::string addOrdel = fileAdded ? "add" : "del";

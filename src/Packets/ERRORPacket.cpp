@@ -45,9 +45,6 @@ void ERRORPacket::difineErrMsg() {
     }
 }
 
-bool ERRORPacket::haveEndByte() {
-    return true;
-}
 
 std::string ERRORPacket::getErrMsg() {
     return ErrMsg;

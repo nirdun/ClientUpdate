@@ -20,7 +20,3 @@ wchar_t LOGRQPacket::getEndByte() {
 void LOGRQPacket::setEndByte(wchar_t endByte) {
     this->endByte = endByte;
 }
-
-bool LOGRQPacket::haveEndByte() {
-    return true;
-}

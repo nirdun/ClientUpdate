@@ -12,9 +12,8 @@ BasePacket::BasePacket(std::vector<char> &bytes) {
 BasePacket::BasePacket() {
     bytyarr = std::vector<char>(0);
 }
-
-bool BasePacket::haveEndByte() {
-    return false;
+BasePacket::BasePacket(const BasePacket& basePacket){
+    opCode=basePacket.opCode;
 }
 
 void BasePacket::setOpCode(short opCode) {

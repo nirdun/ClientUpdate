@@ -169,12 +169,12 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
         }
             //ERROR
         case 5: {
-            dynamic_cast<ERRORPacket *> (packetFromServer)->printError();
+            static_cast<ERRORPacket *> (packetFromServer)->printError();
 
         }
             //BCAST
         case 9: {
-            dynamic_cast<BCASTPacket *> (packetFromServer)->printMessage();
+            static_cast<BCASTPacket *> (packetFromServer)->printMessage();
         }
     }
 }

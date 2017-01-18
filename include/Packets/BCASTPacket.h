@@ -26,7 +26,6 @@ public:
 
      void setFileAdded(bool fileAdded);
 
-     bool haveEndByte() override;
 
     void printMessage();
 };

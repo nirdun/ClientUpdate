@@ -9,33 +9,29 @@ private:
     short endByte = 0;
     short ErrorCode = 0;
 
+    void difineErrMsg();
+
 public:
     ERRORPacket(short errorType);
 
     ERRORPacket(short errorType, const std::string &errMsg);
 
-private:
-    void difineErrMsg();
+    std::string getErrMsg();
 
-public:
-     bool haveEndByte() override;
+    void setErrMsg(const std::string &errMsg);
 
+    short getEndByte();
 
-     std::string getErrMsg();
+    void setEndByte(short endByte);
 
-     void setErrMsg(const std::string &errMsg);
+    int getErrorType();
 
-     short getEndByte();
+    void setErrorType(short errorType);
 
-     void setEndByte(short endByte);
+    short getErrorCode();
 
-     int getErrorType();
-
-     void setErrorType(short errorType);
-
-     short getErrorCode();
-
-     void setErrorCode(short errorCode);
+    void setErrorCode(short errorCode);
 
     void printError();
+
 };

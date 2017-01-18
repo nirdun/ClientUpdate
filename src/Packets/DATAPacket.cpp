@@ -1,12 +1,5 @@
 #include "../../include/Packets/DATAPacket.h"
 
-
-DATAPacket::DATAPacket(char* bytes) {
-    this->opCode = 3;
-    this->data = bytes;
-    this->setPacketSize(static_cast<short>(strlen(data)));
-}
-
 DATAPacket::DATAPacket(short size, short block, char *bytes) {
     this->opCode = 3;
     this->data = bytes;

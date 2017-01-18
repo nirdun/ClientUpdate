@@ -13,7 +13,6 @@ public:
 
     BasePacket();
 
-     bool haveEndByte();
-
+    BasePacket(const BasePacket&);
      void setOpCode(short opCode);
 };

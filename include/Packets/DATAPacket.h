@@ -8,17 +8,6 @@
 
 class DATAPacket : public BasePacket {
 public:
-
-    // field from zero to 512 bytes long.
-private:
-    DATAPacket(char *bytes);
-
-    char* data;
-    std::string fileName;
-    short packetSize = 0;
-    short blockNum = 0;
-
-public:
     DATAPacket(std::vector<char> &bytes);
 
     DATAPacket(short opCode, short size, short block, char bytes[]);
@@ -26,20 +15,29 @@ public:
 
     short getPacketSize();
 
-     void setPacketSize(short packetSize);
+    void setPacketSize(short packetSize);
 
-     short getBlockNum();
+    short getBlockNum();
 
-     void setBlockNum(short blockNum);
+    void setBlockNum(short blockNum);
 
     char* getData();
 
-     void setData(std::vector<char> &data);
+    void setData(std::vector<char> &data);
 
-     std::string getFileName();
+    std::string getFileName();
 
-     void setFileName(const std::string &fileName);
+    void setFileName(const std::string &fileName);
 
     void printDirListing();
+private:
+    DATAPacket(char *bytes);
+
+    char* data;
+    std::string fileName;
+    short packetSize;
+    short blockNum ;
+
+
 };
 

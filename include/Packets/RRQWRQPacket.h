@@ -22,6 +22,4 @@ public:
      wchar_t getEndByte();
 
      void setEndByte(wchar_t endByte);
-
-     bool haveEndByte() override;
 };
