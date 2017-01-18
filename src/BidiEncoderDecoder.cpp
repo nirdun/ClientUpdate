@@ -3,13 +3,13 @@
 //
 
 
-#include "packets/BasePacket.h"
-#include "packets/DIRQPacket.h"
-#include "packets/DISCPacket.h"
-#include "packets/ACKPacket.h"
-#include "packets/ERRORPacket.h"
+#include "../include/Packets/BasePacket.h"
+#include "../include/Packets/DIRQPacket.h"
+#include "../include/Packets/DISCPacket.h"
+#include "../include/Packets/ACKPacket.h"
+#include "../include/Packets/ERRORPacket.h"
 #include "../include/BidiEncoderDecoder.h"
-#include "packets/BCASTPacket.h"
+#include "../include/Packets/BCASTPacket.h"
 #include <Boost/algorithm/string/split.hpp>
 #include <Boost/algorithm/string/classification.hpp>
 #include <boost/lexical_cast.hpp>

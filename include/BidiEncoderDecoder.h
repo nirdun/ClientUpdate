@@ -7,10 +7,10 @@
 
 
 #include <map>
-#include "../src/packets/BasePacket.h"
-#include "../src/packets/DIRQPacket.h"
-#include "../src/packets/DATAPacket.h"
-#include "../src/packets/ERRORPacket.h"
+#include "Packets/BasePacket.h"
+#include "Packets/DIRQPacket.h"
+#include "Packets/DATAPacket.h"
+#include "Packets/ERRORPacket.h"
 
 class BidiEncoderDecoder {
 private:

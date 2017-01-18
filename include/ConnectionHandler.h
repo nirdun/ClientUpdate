@@ -9,7 +9,7 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <map>
-#include "../src/packets/BasePacket.h"
+#include "Packets/BasePacket.h"
 #include "BidiEncoderDecoder.h"
 
 using boost::asio::ip::tcp;

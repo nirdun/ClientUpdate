@@ -6,11 +6,11 @@
 #include <boost/thread/pthread/thread_data.hpp>
 #include "../include/ServerListener.h"
 #include "../include/BidiEncoderDecoder.h"
-#include "packets/BasePacket.h"
-#include "packets/BCASTPacket.h"
-#include "packets/ERRORPacket.h"
-#include "packets/ACKPacket.h"
-#include "packets/DATAPacket.h"
+#include "../include/Packets/BasePacket.h"
+#include "../include/Packets/BCASTPacket.h"
+#include "../include/Packets/ERRORPacket.h"
+#include "../include/Packets/ACKPacket.h"
+#include "../include/Packets/DATAPacket.h"
 #include <fstream>
 #include <sstream>
 #include <boost/filesystem/fstream.hpp>
