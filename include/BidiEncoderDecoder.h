@@ -31,7 +31,7 @@ private:
 
     DATAPacket *createDataPacket();
 
-//    static Set<int> *const haveEndByte = std::unordered_set<int>(Arrays::asList(1, 2, 5, 7, 8, 9));
+//    static Set<int> *const haveEndByte = std::unordered_set<int>(Arrays::asList(1,1 2, 5, 7, 8, 9));
     std::vector<char> encode(BasePacket *packet);
 
     std::vector<char> encodeDataPacket(DATAPacket *dpacket);
