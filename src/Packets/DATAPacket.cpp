@@ -3,32 +3,26 @@
 DATAPacket::DATAPacket(short size, short block, char *bytes) {
     this->opCode = 3;
     this->data = bytes;
-    setBlockNum(block);
-    this->setPacketSize(static_cast<short>(strlen(data)));
+    this->blockNum=block;
+    this->packetSize=size;
 }
 
 DATAPacket::DATAPacket(short opCode, short size, short block, char* bytes) {
     this->opCode = opCode;
     this->data = bytes;
-    setBlockNum(block);
-    this->setPacketSize(static_cast<short>(strlen(data)));
+    this->blockNum=block;
+    this->packetSize=size;
 }
 
 short DATAPacket::getPacketSize() {
     return packetSize;
 }
 
-void DATAPacket::setPacketSize(short packetSize) {
-    this->packetSize = packetSize;
-}
 
 short DATAPacket::getBlockNum() {
     return blockNum;
 }
 
-void DATAPacket::setBlockNum(short blockNum) {
-    this->blockNum = blockNum;
-}
 
 
 char* DATAPacket::getData() {
@@ -36,14 +30,4 @@ char* DATAPacket::getData() {
     return data;
 }
 
-std::string DATAPacket::getFileName() {
-    return fileName;
-}
 
-void DATAPacket::setFileName(const std::string &fileName) {
-    this->fileName = fileName;
-}
-
-void DATAPacket::printDirListing() {
-
-}

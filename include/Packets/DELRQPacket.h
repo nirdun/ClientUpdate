@@ -5,26 +5,15 @@
 #include <vector>
 
 
-class BCASTPacket : public BasePacket {
-private:
-    std::string Filename;
-    bool fileAdded = false;
-
+class DELRQPacket : public BasePacket {
 public:
-    BCASTPacket(std::vector<char> &bytes);
+    std::string fileName;
+    wchar_t endByte = L'\0';
 
-    BCASTPacket(char addOrDelete, const std::string &filename);
+    DELRQPacket(std::vector<char> &bytes);
 
-    BCASTPacket(const std::string &filename);
+    DELRQPacket(const std::string &fileName);
 
-    //todo initiailize while getting bytes.
-     std::string getFileName();
 
-     void setFilename(const std::string &filename);
 
-     bool isFileAdded();
-
-     void setFileAdded(bool fileAdded);
-
-    void printMessage();
 };

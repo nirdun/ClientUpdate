@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <sstream>
+#include <string.h>
 
 class DATAPacket : public BasePacket {
 public:
@@ -15,26 +15,15 @@ public:
 
     short getPacketSize();
 
-    void setPacketSize(short packetSize);
-
     short getBlockNum();
-
-    void setBlockNum(short blockNum);
 
     char* getData();
 
-    void setData(std::vector<char> &data);
 
-    std::string getFileName();
-
-    void setFileName(const std::string &fileName);
-
-    void printDirListing();
 private:
     DATAPacket(char *bytes);
 
     char* data;
-    std::string fileName;
     short packetSize;
     short blockNum ;
 

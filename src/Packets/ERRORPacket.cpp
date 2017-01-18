@@ -46,37 +46,12 @@ void ERRORPacket::difineErrMsg() {
 }
 
 
-std::string ERRORPacket::getErrMsg() {
-    return ErrMsg;
-}
+//todo this
 
-void ERRORPacket::setErrMsg(const std::string &errMsg) {
-    ErrMsg = errMsg;
-}
+//short ERRORPacket::getErrorCode() {
+//    return ErrorCode;
+//}
 
-short ERRORPacket::getEndByte() {
-    return endByte;
-}
-
-void ERRORPacket::setEndByte(short endByte) {
-    this->endByte = endByte;
-}
-
-int ERRORPacket::getErrorType() {
-    return ErrorCode;
-}
-
-void ERRORPacket::setErrorType(short errorType) {
-    this->ErrorCode = errorType;
-}
-
-short ERRORPacket::getErrorCode() {
-    return ErrorCode;
-}
-
-void ERRORPacket::setErrorCode(short errorCode) {
-    ErrorCode = errorCode;
-}
 
 void ERRORPacket::printError() {
     std::cout << "ERROR " << ErrorCode <<std::endl;
