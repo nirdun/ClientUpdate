@@ -5,13 +5,6 @@ LOGRQPacket::LOGRQPacket() {
 
 }
 
-std::string LOGRQPacket::getUserName() {
-    return userName;
-}
-
-void LOGRQPacket::setUserName(const std::string &userName) {
-    this->userName = userName;
-}
 
 wchar_t LOGRQPacket::getEndByte() {
     return endByte;

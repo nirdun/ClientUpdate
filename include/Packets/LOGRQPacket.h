@@ -13,9 +13,7 @@ public:
 
     LOGRQPacket();
 
-     std::string getUserName();
 
-     void setUserName(const std::string &userName);
 
      wchar_t getEndByte();
 

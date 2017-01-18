@@ -26,6 +26,17 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
         _packetSize(0),
         _counterRead(0) {
     byteArr = std::vector<char>(1024);
+    opCodeMap.clear();
+    opCodeMap["RRQ"] = 1;
+    opCodeMap["WRQ"] = 2;
+    opCodeMap["DATA"] = 3;
+    opCodeMap["ACK"] = 4;
+    opCodeMap["ERROR"] = 5;
+    opCodeMap["DIRQ"] = 6;
+    opCodeMap["LOGRQ"] = 7;
+    opCodeMap["DELRQ"] = 8;
+    opCodeMap["BCAST"] = 9;
+    opCodeMap["DISC"] = 10;
 }
 
 BasePacket *BidiEncoderDecoder::decodeBytes(char bytes[]) {
@@ -96,83 +107,135 @@ void BidiEncoderDecoder::shortToBytes(short num, char *bytesArr) {
 
 char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     std::cout << "inside encodeInputTobytes"<<std::endl;
-    opCodeMap.clear();
-    opCodeMap["RRQ"] = 1;
-    opCodeMap["WRQ"] = 2;
-    opCodeMap["DATA"] = 3;
-    opCodeMap["ACK"] = 4;
-    opCodeMap["ERROR"] = 5;
-    opCodeMap["DIRQ"] = 6;
-    opCodeMap["LOGRQ"] = 7;
-    opCodeMap["DELRQ"] = 8;
-    opCodeMap["BCAST"] = 9;
-    opCodeMap["DISC"] = 10;
+
+
+    std::cout << "after map"<<std::endl;
 
     std::vector<std::string> lineSplited;
     istringstream iss(line);
     copy(std::istream_iterator<std::string>(iss),
          std::istream_iterator<std::string>(),
          back_inserter(lineSplited));
-    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
+
+//    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
+    std::cout <<opCodeMap.at(lineSplited.at(0))<<"      "<<opCodeMap.at(lineSplited.at(1))<<std::endl;
 
     char *bytes;
-    switch (opCodeMap.at(lineSplited.at(0))) {
-        //RRQ
-        case 1:
 
-            this->fileName = lineSplited.at(1);
-            bytes = new char[this->fileName.length() + 3];
-            shortToBytes(1, bytes);
-            addStringToBytes(fileName, bytes, 2);
-            bytes[this->fileName.length() + 2] = '\0';
-            break;
-            //WRQ
-        case 2:
-            this->fileName = lineSplited.at(1);
-            bytes = new char[this->fileName.length() + 3];
-            shortToBytes(2, bytes);
-            addStringToBytes(fileName, bytes, 2);
-            bytes[this->fileName.length() + 2] = '\0';
-            break;
-        case 4:
-            bytes = new char[4];
-            shortToBytes(4, bytes);
-            addStringToBytes(lineSplited.at(1), bytes, 2);
+    vector<string>::iterator it;
 
-            break;
-            //DIRQ
-        case 6:
-            bytes = new char[2];
-            shortToBytes(6, bytes);
-            break;
-            //LOGRQ
-        case 7:
-            std::cout << "inside logrq"<<std::endl;
+    //line splited.at(0)
+    it=lineSplited.begin();
+    string request=it->data();
 
-            this->userName = lineSplited.at(1);
-            bytes = new char[this->userName.length() + 3];
-            shortToBytes(7, bytes);
-            addStringToBytes(userName, bytes, 2);
-            bytes[this->userName.length() + 2] = '\0';
-            break;
-            //DELRQ
-        case 8:
-            this->fileName = lineSplited.at(1);
-            bytes = new char[this->fileName.length() + 3];
-            shortToBytes(8, bytes);
-            addStringToBytes(fileName, bytes, 2);
-            bytes[this->fileName.length() + 2] = '\0';
-            break;
-            //DISC
-        case 10:
-            bytes = new char[2];
-            shortToBytes(6, bytes);
-            break;
-        default:
-            std::cout << "something wrong";
+    //line splited.at(1)
+    it=lineSplited.end();
+    string str=it->data();
+    std::cout <<"after splited"<<std::endl;
+    if(request=="RRQ"){
+        this->fileName = str;
+        bytes = new char[this->fileName.length() + 3];
+        shortToBytes(1, bytes);
+        addStringToBytes(fileName, bytes, 2);
+        bytes[this->fileName.length() + 2] = '\0';
+    }
+    else if(request=="WRQ"){
+        this->fileName = str;
+        bytes = new char[this->fileName.length() + 3];
+        shortToBytes(2, bytes);
+        addStringToBytes(fileName, bytes, 2);
+        bytes[this->fileName.length() + 2] = '\0';
+    }else if(request=="ACK"){
+        bytes = new char[4];
+        shortToBytes(4, bytes);
+        addStringToBytes(str, bytes, 2);
 
+    }else if(request=="DIRQ"){
+        bytes = new char[2];
+        shortToBytes((short)6, bytes);
+    }else if(request=="LOGRQ"){
+        std::cout << "inside logrq"<<std::endl;
+        bytes = new char[str.length() + 3];
+        shortToBytes(7, bytes);
+        addStringToBytes(str, bytes, 2);
+        bytes[str.length() + 2] = '\0';
+        std::cout << "end of logrq"<<std::endl;
+    }else if(request=="DELRQ"){
+        this->fileName = str;
+        bytes = new char[this->fileName.length() + 3];
+        shortToBytes(8, bytes);
+        addStringToBytes(fileName, bytes, 2);
+        bytes[this->fileName.length() + 2] = '\0';
+    }else if(request=="DISC"){
+        bytes = new char[2];
+        shortToBytes(6, bytes);
+
+    }else{
+        std::cout << "something wrong ---";
 
     }
+
+
+//
+//    switch (opCodeMap.at(lineSplited.at(0))) {
+//        //RRQ
+//        case 1:
+//
+//            this->fileName = lineSplited.at(1);
+//            bytes = new char[this->fileName.length() + 3];
+//            shortToBytes(1, bytes);
+//            addStringToBytes(fileName, bytes, 2);
+//            bytes[this->fileName.length() + 2] = '\0';
+//            break;
+//            //WRQ
+//        case 2:
+//            this->fileName = lineSplited.at(1);
+//            bytes = new char[this->fileName.length() + 3];
+//            shortToBytes(2, bytes);
+//            addStringToBytes(fileName, bytes, 2);
+//            bytes[this->fileName.length() + 2] = '\0';
+//            break;
+//        case 4:
+//            bytes = new char[4];
+//            shortToBytes(4, bytes);
+//            addStringToBytes(lineSplited.at(1), bytes, 2);
+//
+//            break;
+//            //DIRQ
+//        case 6:
+//            bytes = new char[2];
+//            shortToBytes((short)6, bytes);
+//            break;
+//            //LOGRQ
+//        case 7:
+//        std::string use=lineSplited.at(1);
+//            std::cout << "inside logrq"<<std::endl;
+//
+//            this->userName = lineSplited.at(1);
+//            bytes = new char[this->userName.length() + 3];
+//            shortToBytes(7, bytes);
+//            addStringToBytes(userName, bytes, 2);
+//            bytes[this->userName.length() + 2] = '\0';
+//            std::cout << "inside logrq"<<std::endl;
+//            break;
+//            //DELRQ
+//        case 8:
+//            this->fileName = lineSplited.at(1);
+//            bytes = new char[this->fileName.length() + 3];
+//            shortToBytes(8, bytes);
+//            addStringToBytes(fileName, bytes, 2);
+//            bytes[this->fileName.length() + 2] = '\0';
+//            break;
+//            //DISC
+//        case 10:
+//            bytes = new char[2];
+//            shortToBytes(6, bytes);
+//            break;
+//        default:
+//            std::cout << "something wrong";
+//
+//
+//    }
     return bytes;
 
 }

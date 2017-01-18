@@ -20,13 +20,8 @@ private:
     int _counterRead;
     std::vector<char> byteArr;
     std::string fileName;
-    std::string userName;
     std::map<std::string, short> opCodeMap;
-public:
 
-    BidiEncoderDecoder();
-
-private:
     void mergeArrays(char* insertTo,char *insertFrom,int from);
 
     DATAPacket *createDataPacket();
@@ -40,7 +35,7 @@ private:
     char * getPartOfByteArray(char bytes[], int from, int to);
 
 public:
-
+    BidiEncoderDecoder();
     std::string getFileName();
     BasePacket *decodeBytes(char bytes[]);
 
