@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <sstream>
 
 class DATAPacket : public BasePacket {
 public:
