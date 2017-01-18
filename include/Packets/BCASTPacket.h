@@ -20,7 +20,7 @@ public:
     //todo initiailize while getting bytes.
      std::string getFileName();
 
-     void setFilename(const std::string &filename);
+//     void setFilename(const std::string &filename);
 
      bool isFileAdded();
 

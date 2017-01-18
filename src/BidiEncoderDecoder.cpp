@@ -108,7 +108,10 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     opCodeMap["DISC"] = 10;
 
     std::vector<std::string> lineSplited;
-    boost::split(lineSplited, line, boost::is_any_of(" "));
+    istringstream iss(line);
+    copy(istream_iterator<string>(iss),
+         istream_iterator<string>(),
+         back_inserter(lineSplited));
     char *bytes;
     switch (opCodeMap.at(lineSplited.at(0))) {
         //RRQ
