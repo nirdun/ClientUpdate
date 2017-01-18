@@ -2,13 +2,13 @@
 // Created by ניר דוניץ on 15.1.2017.
 //
 
-#ifndef CLIENT_KEYBOARDLISTENER_H
-#define CLIENT_KEYBOARDLISTENER_H
+#ifndef CLIENT_keyBoardListener_H
+#define CLIENT_keyBoardListener_H
 
 #include <boost/thread.hpp>
 #include "ConnectionHandler.h"
 
-class KeyboardListener {
+class keyBoardListener {
 private:
     std::string _listenerType;
     ConnectionHandler &_handler;
@@ -17,7 +17,7 @@ private:
 
 
 public:
-    KeyboardListener(ConnectionHandler &handler);
+    keyBoardListener(ConnectionHandler &handler);
 
     void run();
 
@@ -27,4 +27,4 @@ public:
 #include <boost/thread.hpp>
 
 
-#endif //CLIENT_KEYBOARDLISTENER_H
+#endif //CLIENT_keyBoardListener_H

@@ -1,16 +1,16 @@
 
 
-#include "../include/KeyboardListener.h"
+#include "../include/keyBoardListener.h"
 
 
 
-KeyboardListener::KeyboardListener(ConnectionHandler &handler):
+keyBoardListener::keyBoardListener(ConnectionHandler &handler):
         _listenerType("keyboard"),
         _handler(handler),
         _bufferSize(1024){
 }
 
-void KeyboardListener::run() {
+void keyBoardListener::run() {
 
     while (!_handler.shouldTerminate()) {
         char buf[_bufferSize];
