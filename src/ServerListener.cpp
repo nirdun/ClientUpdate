@@ -48,7 +48,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
         //DATA
         case 3: {
             char *data = (static_cast<DATAPacket *>(packetFromServer))->getData();
-            dataFromServer.insert(dataFromServer.end(), data, data + strlen(data));
+            dataFromServer.insert(dataFromServer.end(), data, data + sizeof(data));
             short dataSize = (static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
             short blockNumber = (static_cast<DATAPacket *>(packetFromServer))->getBlockNum();
             //downloading

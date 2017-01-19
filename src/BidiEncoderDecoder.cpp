@@ -42,7 +42,7 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
 BasePacket *BidiEncoderDecoder::decodeBytes(char bytes[]) {
 
     _opCode = bytesToShort(bytes[0], bytes[1]);
-    int length = strlen(bytes);
+
     switch (_opCode) {
         //DATA
         case 3: {
@@ -53,7 +53,7 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char bytes[]) {
             return new DATAPacket(_opCode,
                                   _packetSize,
                                   _block,
-                                  getPartOfByteArray(bytes, 6, strlen(bytes)));
+                                  getPartOfByteArray(bytes, 6, sizeof(bytes)));
         }
             //ACK
         case 4: {
@@ -84,11 +84,7 @@ std::string BidiEncoderDecoder::bytesToString(char bytes[]) {
     return std::string(bytes);
 }
 
-short BidiEncoderDecoder::bytesToShort(char a, char b) {
-    short result = (short) ((a & 0xff) << 8);
-    result += (short) (b & 0xff);
-    return result;
-}
+
 
 char *BidiEncoderDecoder::getPartOfByteArray(char bytes[], int from, int to) {
     int size = to - from;
@@ -118,7 +114,6 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
          back_inserter(lineSplited));
 
 //    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
-    std::cout <<opCodeMap.at(lineSplited.at(0))<<"      "<<opCodeMap.at(lineSplited.at(1))<<std::endl;
 
     char *bytes;
 
@@ -128,8 +123,8 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     it=lineSplited.begin();
     string request=it->data();
 
+    it++;
     //line splited.at(1)
-    it=lineSplited.end();
     string str=it->data();
     std::cout <<"after splited"<<std::endl;
     if(request=="RRQ"){
@@ -146,6 +141,7 @@ char *BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         addStringToBytes(fileName, bytes, 2);
         bytes[this->fileName.length() + 2] = '\0';
     }else if(request=="ACK"){
+        //todo disc shoult termintae
         bytes = new char[4];
         shortToBytes(4, bytes);
         addStringToBytes(str, bytes, 2);

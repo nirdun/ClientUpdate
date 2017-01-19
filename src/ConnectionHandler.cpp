@@ -106,14 +106,20 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 }
 
 bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
+    std::cout <<bytes[0]<<std::endl;
+    std::cout <<bytes[1]<<std::endl;
+    std::cout <<bytes[2]<<std::endl;
+    std::cout <<bytesToWrite<<std::endl;
+
     int tmp = 0;
     boost::system::error_code error;
     try {
         while (!error && bytesToWrite > tmp) {
-            std::cout << "inside sending bytes while loop"<<std::endl;
+            std::cout << "bytesToWrite =  "<<bytesToWrite<<std::endl;
+            std::cout << "size of array =  "<< sizeof(bytes)<<std::endl;
 
             tmp += socket_.write_some(boost::asio::buffer(bytes + tmp, bytesToWrite - tmp), error);
-            std::cout << "wrote something to server"<<std::endl;
+            std::cout << "after wrote something to server"<<std::endl;
         }
         if (error)
             throw boost::system::system_error(error);
@@ -176,7 +182,7 @@ bool ConnectionHandler::encodeAndSend(std::string line) {
     updateCurrentAction(packetBytes);
     std::cout << "before send bytes"<<std::endl;
 
-    return sendBytes(packetBytes, strlen(packetBytes));
+    return sendBytes(packetBytes, sizeof(packetBytes));
 
 }
 
@@ -228,7 +234,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
             getBytes(&errorCodeArr[1], 1);
 //            short errorCode = encoderDecoder->bytesToShort(errorCodeArr[0], errorCodeArr[1]);
             char *errorMsg = getBytesUntilDelimeter();
-            char *packetToEncode = new char[strlen(errorMsg) + 4];
+            char *packetToEncode = new char[sizeof(errorMsg) + 4];
             packetFromServer = encoderDecoder->decodeBytes(packetToEncode);
             break;
         }
@@ -237,7 +243,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
             char addOrDel[1];
             getBytes(&addOrDel[0], 1);
             char *fileName = getBytesUntilDelimeter();
-            char *packetToEncode = new char[strlen(fileName) + 3];
+            char *packetToEncode = new char[sizeof(fileName) + 3];
             packetFromServer = encoderDecoder->decodeBytes(packetToEncode);
             break;
         }
@@ -254,7 +260,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
 
 
 void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom, int from) {
-    for (unsigned int i = from; i < from + strlen(insertFrom); i++) {
+    for (unsigned int i = from; i < from + sizeof(insertFrom); i++) {
         insertTo[i] = insertFrom[i - from];
     }
 
