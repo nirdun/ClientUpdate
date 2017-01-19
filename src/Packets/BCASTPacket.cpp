@@ -2,12 +2,6 @@
 #include "../../include/Packets/BCASTPacket.h"
 
 
-BCASTPacket::BCASTPacket(std::vector<char> &bytes) {
-    this->opCode = 9;
-    bytyarr = bytes;
-
-}
-
 BCASTPacket::BCASTPacket(char addOrDelete, const std::string &filename) {
     this->opCode = 9;
     this->fileAdded = addOrDelete == '1' ? true : false;

@@ -4,7 +4,6 @@
 #include "../include/ConnectionHandler.h"
 #include "../include/Packets/ACKPacket.h"
 
-
 using boost::asio::ip::tcp;
 
 using std::cin;
@@ -203,13 +202,19 @@ bool ConnectionHandler::encodeAndSend(std::string line) {
 //reading bytes according to op code
 BasePacket *ConnectionHandler::processServerPakect() {
     char opCodeArr[2];
-    getBytes(&opCodeArr[0], 1);
-    getBytes(&opCodeArr[1], 1);
+    std::cout << "before get first byte"<<std::endl;
+    getBytes(opCodeArr, 1);
+    std::cout << "after get first byte"<<std::endl;
+
+    getBytes(opCodeArr + 1, 1);
+    std::cout << "after get 2 bytes"<<std::endl;
+
 
     short opCode = encoderDecoder->bytesToShort(opCodeArr[0], opCodeArr[1]);
     std::vector<char>bytesToDecode;
     encoderDecoder->arrayToVector(&bytesToDecode,opCodeArr,2);
     BasePacket *packetFromServer;
+    std::cout << "before switch case with opCode" << opCode <<std::endl;
 
     switch (opCode) {
         //DATA
@@ -229,26 +234,38 @@ BasePacket *ConnectionHandler::processServerPakect() {
         }
             //ACK
         case 4: {
+            std::cout << "inside ACK"<<std::endl;
             char blockNumberACK[2];
             getBytes(&blockNumberACK[0], 1);
             getBytes(&blockNumberACK[1], 1);
+            char packetToDecode[4];
+            //void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom, int from) {
+            mergeArrays(packetToDecode, opCodeArr,2, 0);
+            mergeArrays(packetToDecode, blockNumberACK,2, 2);
+            std::cout << "mid ACK"<<std::endl;
 //            short blockNumber = encoderDecoder->bytesToShort(blockNumberACK[0], blockNumberACK[1]);
-            packetFromServer = encoderDecoder->decodeBytes(blockNumberACK,4);
+            packetFromServer = encoderDecoder->decodeBytes(packetToDecode,4);
+            std::cout << "after ACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
             break;
         }
             //ERROR
         case 5: {
+            std::cout << "inside ERROR"<<std::endl;
             char errorCodeArr[2];
             getBytes(&errorCodeArr[0], 1);
             getBytes(&errorCodeArr[1], 1);
             encoderDecoder->arrayToVector(&bytesToDecode,errorCodeArr,2);
 //            short errorCode = encoderDecoder->bytesToShort(errorCodeArr[0], errorCodeArr[1]);
+            std::cout << "mid ERROR"<<std::endl;
             std::vector<char> errorMsg = getBytesUntilDelimeter();
             bytesToDecode.insert(std::end(bytesToDecode), std::begin(errorMsg), std::end(errorMsg));
+            std::cout << "mid2 ERROR"<<std::endl;
             int size=errorMsg.size() + 4;
             char *packetToEncode = new char[size];
             encoderDecoder->vectorToArray(bytesToDecode,packetToEncode);
+            std::cout << "mid3 ERROR"<<std::endl;
             packetFromServer = encoderDecoder->decodeBytes(packetToEncode,size);
+            std::cout << "end ERROR"<<std::endl;
             break;
         }
             //DBCAST
@@ -264,18 +281,15 @@ BasePacket *ConnectionHandler::processServerPakect() {
 
         default:
             std::cout << ("something went wrong") << std::endl;
-
-
+            break;
     }
-    static_cast<ACKPacket *>(packetFromServer)->getBlockNum();
+
     return packetFromServer;
-
-
 }
 
 
-void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom, int from) {
-    for (unsigned int i = from; i < from + sizeof(insertFrom); i++) {
+void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom,int sizeOfInsertFrom, int from) {
+    for (unsigned int i = from; i < from + sizeOfInsertFrom; i++) {
         insertTo[i] = insertFrom[i - from];
     }
 

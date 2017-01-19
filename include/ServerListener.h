@@ -16,7 +16,7 @@ private:
     ConnectionHandler &_handler;
     std::vector<char> dataFromServer;
     void shortToBytes(short num, char *bytesArr);
-    std::map<int,std::vector<char>> dataMapToSend;
+    std::map<int,std::vector<char> > dataMapToSend;
 public:
     ServerListener(ConnectionHandler& handler);
     void run();

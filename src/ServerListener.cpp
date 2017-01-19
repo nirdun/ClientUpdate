@@ -36,6 +36,7 @@ void ServerListener::run() {
         BasePacket *packetFromServer;
 
         packetFromServer = _handler.processServerPakect();
+        std::cout << "After process packet in serverlistener"<<std::endl;
         createResponse(packetFromServer);
 
     }
@@ -126,8 +127,8 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                         shortToBytes(blockNum + 1, blockNumArr);
                         char packetSizeArr[2];
                         shortToBytes((short) sizeOfPacket, packetSizeArr);
-                        _handler.mergeArrays(bytesToSend, packetSizeArr, 2);
-                        _handler.mergeArrays(bytesToSend, blockNumArr, 4);
+                        _handler.mergeArrays(bytesToSend, packetSizeArr,2, 2);
+                        _handler.mergeArrays(bytesToSend, blockNumArr,2, 4);
 
                         _handler.sendBytes(bytesToSend, sizeOfPacket);
                         delete[] bytesToSend;

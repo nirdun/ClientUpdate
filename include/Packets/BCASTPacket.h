@@ -11,8 +11,6 @@ private:
     bool fileAdded = false;
 
 public:
-    BCASTPacket(std::vector<char> &bytes);
-
     BCASTPacket(char addOrDelete, const std::string &filename);
 
     BCASTPacket(const std::string &filename);

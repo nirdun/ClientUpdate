@@ -7,6 +7,8 @@
 
 class DELRQPacket : public BasePacket {
 public:
+    DELRQPacket();
+
     std::string fileName;
     wchar_t endByte = L'\0';
 

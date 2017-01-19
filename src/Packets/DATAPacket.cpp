@@ -29,5 +29,3 @@ char* DATAPacket::getData() {
     //todo - clone?
     return data;
 }
-
-

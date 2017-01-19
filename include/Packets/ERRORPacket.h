@@ -6,7 +6,6 @@
 class ERRORPacket : public BasePacket {
 private:
     std::string ErrMsg;
-    short endByte;
     short ErrorCode;
 
     void difineErrMsg();

@@ -43,7 +43,7 @@ public:
 
     bool shouldTerminate();
     bool encodeAndSend(std::string line);
-    void mergeArrays(char* insertTo,char *insertFrom,int from);
+    void mergeArrays(char* insertTo,char *insertFrom,int sizeOfInsertFrom,int from);
 
 
     BasePacket *processServerPakect();

@@ -8,7 +8,6 @@
 
 class DATAPacket : public BasePacket {
 public:
-    DATAPacket(std::vector<char> &bytes);
 
     DATAPacket(short opCode, short size, short block, char bytes[]);
     DATAPacket(short size, short block, char bytes[]);
@@ -21,8 +20,6 @@ public:
 
 
 private:
-    DATAPacket(char *bytes);
-
     char* data;
     short packetSize;
     short blockNum ;
