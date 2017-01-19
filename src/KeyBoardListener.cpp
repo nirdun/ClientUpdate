@@ -24,7 +24,7 @@ void KeyBoardListener::run() {
         int len = line.length();
         if (!_handler.encodeAndSend(line)) {
             //todo check if should sync
-            std::cout << "something went wrong while sending... \n" << std::endl;
+            std::cout << "something went wrong whilee sending... \n" << std::endl;
             continue;
         }
 // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
