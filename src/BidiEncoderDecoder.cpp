@@ -58,6 +58,8 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char* bytes,int lengthOfArray) {
             //ACK
         case 4: {
             _block = bytesToShort(bytes[2], bytes[3]);
+            ACKPacket* packet=new ACKPacket(_block);
+            packet->getOpCode();
             return new ACKPacket(_block);
         }
             //ERROR
@@ -156,7 +158,7 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
 
     }else if(request=="LOGRQ"){
         std::cout << "inside logrq"<<std::endl;
-        shortToBytes((short)7, bytes);
+        shortToBytes((short)7, opCodeBytes);
         arrayToVector(&bytesVec,opCodeBytes,2);
         std::cout << "before copy"<<std::endl;
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));

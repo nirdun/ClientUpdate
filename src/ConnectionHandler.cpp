@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "../include/ConnectionHandler.h"
+#include "../include/Packets/ACKPacket.h"
 
 
 using boost::asio::ip::tcp;
@@ -228,7 +229,6 @@ BasePacket *ConnectionHandler::processServerPakect() {
         }
             //ACK
         case 4: {
-
             char blockNumberACK[2];
             getBytes(&blockNumberACK[0], 1);
             getBytes(&blockNumberACK[1], 1);
@@ -241,10 +241,13 @@ BasePacket *ConnectionHandler::processServerPakect() {
             char errorCodeArr[2];
             getBytes(&errorCodeArr[0], 1);
             getBytes(&errorCodeArr[1], 1);
+            encoderDecoder->arrayToVector(&bytesToDecode,errorCodeArr,2);
 //            short errorCode = encoderDecoder->bytesToShort(errorCodeArr[0], errorCodeArr[1]);
             std::vector<char> errorMsg = getBytesUntilDelimeter();
+            bytesToDecode.insert(std::end(bytesToDecode), std::begin(errorMsg), std::end(errorMsg));
             int size=errorMsg.size() + 4;
             char *packetToEncode = new char[size];
+            encoderDecoder->vectorToArray(bytesToDecode,packetToEncode);
             packetFromServer = encoderDecoder->decodeBytes(packetToEncode,size);
             break;
         }
@@ -264,6 +267,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
 
 
     }
+    static_cast<ACKPacket *>(packetFromServer)->getBlockNum();
     return packetFromServer;
 
 
