@@ -11,6 +11,8 @@
 #include "Packets/DIRQPacket.h"
 #include "Packets/DATAPacket.h"
 #include "Packets/ERRORPacket.h"
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 class BidiEncoderDecoder {
 private:

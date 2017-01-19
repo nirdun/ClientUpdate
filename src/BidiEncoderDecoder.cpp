@@ -10,6 +10,7 @@
 #include "../include/Packets/BCASTPacket.h"
 
 
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -107,10 +108,7 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     std::cout << "after map"<<std::endl;
 
     std::vector<std::string> lineSplited;
-    istringstream iss(line);
-    copy(std::istream_iterator<std::string>(iss),
-         std::istream_iterator<std::string>(),
-         back_inserter(lineSplited));
+    boost::split(lineSplited,line,boost::is_any_of(" "));
 
 //    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
 
@@ -160,7 +158,10 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         std::cout << "inside logrq"<<std::endl;
         shortToBytes((short)7, bytes);
         arrayToVector(&bytesVec,opCodeBytes,2);
+        std::cout << "before copy"<<std::endl;
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
+        std::cout << "after copy"<<std::endl;
+
         bytesVec.push_back('\0');
         std::cout << "end of logrq"<<std::endl;
     }else if(request=="DELRQ"){
@@ -239,6 +240,8 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
 //
 //
 //    }
+    std::cout << "before return"<<std::endl;
+
     return bytesVec;
 
 }
