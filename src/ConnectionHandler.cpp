@@ -116,7 +116,6 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
     try {
         while (!error && bytesToWrite > tmp) {
             std::cout << "bytesToWrite =  "<<bytesToWrite<<std::endl;
-            std::cout << "size of array =  "<< sizeof(bytes)<<std::endl;
 
             tmp += socket_.write_some(boost::asio::buffer(bytes + tmp, bytesToWrite - tmp), error);
             std::cout << "after wrote something to server"<<std::endl;
@@ -175,14 +174,26 @@ void ConnectionHandler::close() {
 bool ConnectionHandler::encodeAndSend(std::string line) {
     std::cout << "inside encode and send(connection handle)"<<std::endl;
     //todo sync?
-    char *packetBytes = encoderDecoder->encodeInputTobytes(line);
+    std::vector<char> packetBytes=encoderDecoder->encodeInputTobytes(line);
+//    char *packetBytes = encoderDecoder->encodeInputTobytes(line);
     std::cout << "packet was created in char array"<<std::endl;
 
     //todo check if LogIn Is the First Packet to send
-    updateCurrentAction(packetBytes);
+
+    std::vector<char>::iterator it;
+    it=packetBytes.begin();
+
+
+    char opCode[2];
+    char toPush=it.operator*();
+    opCode[0]=toPush;
+    it++;
+    char nextToPush=it.operator*();
+    opCode[1]=nextToPush;
+    updateCurrentAction(opCode);
     std::cout << "before send bytes"<<std::endl;
 
-    return sendBytes(packetBytes, sizeof(packetBytes));
+    return sendBytes(packetBytes.data(), packetBytes.size());
 
 }
 
@@ -291,4 +302,9 @@ void ConnectionHandler::updateCurrentAction(char *bytes) {
     std::cout << "after updateCurrentAction"<<std::endl;
 
 
+}
+void BidiEncoderDecoder::arrayToVector(std::vector<char> *v,char* arr,int size){
+    for(int i=0;i<size;i++){
+        (*v).push_back(arr[i]);
+    }
 }

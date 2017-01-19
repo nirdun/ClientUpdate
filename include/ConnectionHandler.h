@@ -42,7 +42,7 @@ public:
     ConnectionHandler(std::string host, short port);
 
     bool shouldTerminate();
-
+    void arrayToVector(std::vector<char> *v,char* arr,int size);
     bool encodeAndSend(std::string line);
     void mergeArrays(char* insertTo,char *insertFrom,int from);
 

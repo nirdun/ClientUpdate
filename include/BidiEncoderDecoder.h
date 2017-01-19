@@ -34,6 +34,7 @@ private:
     std::vector<char> encodeERROR(ERRORPacket *dpacket);
     char * getPartOfByteArray(char bytes[], int from, int to);
 
+
 public:
     BidiEncoderDecoder();
     std::string getFileName();
@@ -44,8 +45,8 @@ public:
     short bytesToShort(char a, char b);
 
     std::string bytesToString(char *bytes);
-
-    char * encodeInputTobytes(std::string line);
+    void arrayToVector(std::vector<char> *v,char* arr,int size);
+    std::vector<char> encodeInputTobytes(std::string line);
 
     void addStringToBytes(std::string basic_string, char bytes[], int i);
 };

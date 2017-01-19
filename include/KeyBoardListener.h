@@ -15,7 +15,6 @@ private:
     const short _bufferSize;
 
 
-
 public:
     KeyBoardListener(ConnectionHandler &handler);
 
