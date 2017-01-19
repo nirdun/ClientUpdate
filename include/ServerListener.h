@@ -1,7 +1,7 @@
 //
 // Created by ניר דוניץ on 15.1.2017.
 //
-
+#pragma once
 #ifndef CLIENT_SERVERLISTENER_H
 #define CLIENT_SERVERLISTENER_H
 

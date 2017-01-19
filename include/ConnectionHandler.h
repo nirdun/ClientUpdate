@@ -1,7 +1,7 @@
 //
 // Created by ניר דוניץ on 16.1.2017.
 //
-
+#pragma once
 #ifndef CLIENT_CONNECTIONHANDLER_H
 #define CLIENT_CONNECTIONHANDLER_H
 
@@ -42,7 +42,6 @@ public:
     ConnectionHandler(std::string host, short port);
 
     bool shouldTerminate();
-    void arrayToVector(std::vector<char> *v,char* arr,int size);
     bool encodeAndSend(std::string line);
     void mergeArrays(char* insertTo,char *insertFrom,int from);
 
@@ -84,7 +83,7 @@ public:
     void close();
 
 
-    char *getBytesUntilDelimeter();
+    std::vector<char>getBytesUntilDelimeter();
 
     void updateCurrentAction(char *bytes);
 };

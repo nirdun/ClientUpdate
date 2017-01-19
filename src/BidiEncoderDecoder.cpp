@@ -39,10 +39,9 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
     opCodeMap["DISC"] = 10;
 }
 
-BasePacket *BidiEncoderDecoder::decodeBytes(char bytes[]) {
-
+BasePacket *BidiEncoderDecoder::decodeBytes(char* bytes,int lengthOfArray) {
+    char opCodearr;
     _opCode = bytesToShort(bytes[0], bytes[1]);
-    int length = sizeof(bytes);
     switch (_opCode) {
         //DATA
         case 3: {
@@ -53,7 +52,7 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char bytes[]) {
             return new DATAPacket(_opCode,
                                   _packetSize,
                                   _block,
-                                  getPartOfByteArray(bytes, 6, sizeof(bytes)));
+                                  getPartOfByteArray(bytes, 6, lengthOfArray));
         }
             //ACK
         case 4: {
@@ -65,11 +64,11 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char bytes[]) {
 
             short errCode = _packetSize = bytesToShort(bytes[2], bytes[3]);
             //length until 0.
-            return new ERRORPacket(errCode, bytesToString(getPartOfByteArray(bytes, 4, length - 1)));
+            return new ERRORPacket(errCode, bytesToString(getPartOfByteArray(bytes, 4, lengthOfArray - 1)));
         }
             //BCAST
         case 9: {
-            std::string fileName = bytesToString(getPartOfByteArray(bytes, 3, length - 1));
+            std::string fileName = bytesToString(getPartOfByteArray(bytes, 3, lengthOfArray - 1));
             return new BCASTPacket(bytes[2], fileName);
 
         }
@@ -244,13 +243,13 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
 
 }
 
-void BidiEncoderDecoder::addStringToBytes(std::string str, char *bytes, int from) {
-    char temp[str.size() + 1];
-    strcpy(temp, str.c_str());
-    for (int i = from; i - from < (sizeof(temp) / sizeof(*temp)); i++) {
-        bytes[i] = temp[i - from];
-    }
-}
+//void BidiEncoderDecoder::addStringToBytes(std::string str, char *bytes, int from) {
+//    char temp[str.size() + 1];
+//    strcpy(temp, str.c_str());
+//    for (int i = from; i - from < (sizeof(temp) / sizeof(*temp)); i++) {
+//        bytes[i] = temp[i - from];
+//    }
+//}
 
 std::string BidiEncoderDecoder::getFileName() {
     return this->fileName;
@@ -260,4 +259,22 @@ void BidiEncoderDecoder::arrayToVector(std::vector<char> *v,char* arr,int size){
     for(int i=0;i<size;i++){
         (*v).push_back(arr[i]);
     }
+}
+
+
+void BidiEncoderDecoder::vectorToArray(std::vector<char> vector,char *arr){
+    std::vector<char>::iterator it;
+    int i=0;
+    for(std::vector<char>::iterator it = vector.begin(); it != vector.end(); ++it) {
+
+        arr[i]=it.operator*();
+        i++;
+    }
+
+}
+
+short BidiEncoderDecoder::bytesToShort(char a, char b) {
+    short result = (short) ((a & 0xff) << 8);
+    result += (short) (b & 0xff);
+    return result;
 }

@@ -1,7 +1,7 @@
 //
 // Created by ניר דוניץ on 16.1.2017.
 //
-
+#pragma once
 #ifndef BIDIENCODERDECODER_H
 #define BIDIENCODERDECODER_H
 
@@ -38,7 +38,8 @@ private:
 public:
     BidiEncoderDecoder();
     std::string getFileName();
-    BasePacket *decodeBytes(char bytes[]);
+    void vectorToArray(std::vector<char> vector,char *arr);
+    BasePacket *decodeBytes(char* bytes,int lengthOfArray);
 
     short getOpCode(char a, char b);
 
@@ -48,7 +49,7 @@ public:
     void arrayToVector(std::vector<char> *v,char* arr,int size);
     std::vector<char> encodeInputTobytes(std::string line);
 
-    void addStringToBytes(std::string basic_string, char bytes[], int i);
+//    void addStringToBytes(std::string basic_string, char bytes[], int i);
 };
 
 #endif //BIDIENCODERDECODER_H
