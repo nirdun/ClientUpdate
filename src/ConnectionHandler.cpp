@@ -108,19 +108,12 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 }
 
 bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
-    std::cout <<bytes[0]<<std::endl;
-    std::cout <<bytes[1]<<std::endl;
-    std::cout <<bytes[2]<<std::endl;
-    std::cout <<bytesToWrite<<std::endl;
-
     int tmp = 0;
     boost::system::error_code error;
     try {
         while (!error && bytesToWrite > tmp) {
-            std::cout << "bytesToWrite =  "<<bytesToWrite<<std::endl;
 
             tmp += socket_.write_some(boost::asio::buffer(bytes + tmp, bytesToWrite - tmp), error);
-            std::cout << "after wrote something to server"<<std::endl;
         }
         if (error)
             throw boost::system::system_error(error);
@@ -203,23 +196,22 @@ bool ConnectionHandler::encodeAndSend(std::string line) {
 //reading bytes according to op code
 BasePacket *ConnectionHandler::processServerPakect() {
     char opCodeArr[2];
-    std::cout << "before get first byte"<<std::endl;
     getBytes(opCodeArr, 1);
-    std::cout << "after get first byte"<<std::endl;
 
     getBytes(opCodeArr + 1, 1);
-    std::cout << "after get 2 bytes"<<std::endl;
 
 
     short opCode = encoderDecoder->bytesToShort(opCodeArr[0], opCodeArr[1]);
     std::vector<char>bytesToDecode;
     encoderDecoder->arrayToVector(&bytesToDecode,opCodeArr,2);
     BasePacket *packetFromServer;
-    std::cout << "before switch case with opCode" << opCode <<std::endl;
+
 
     switch (opCode) {
         //DATA
         case 3: {
+            std::cout << "proccesing DATA"<<std::endl;
+
             char sizeAndBlock[4];
             encoderDecoder->arrayToVector(&bytesToDecode,sizeAndBlock,4);
             getBytes(sizeAndBlock, 4);
@@ -229,7 +221,15 @@ BasePacket *ConnectionHandler::processServerPakect() {
             getBytes(data, packetSize);
             encoderDecoder->arrayToVector(&bytesToDecode,data,packetSize);
             char packetToDecode[packetSize+6];
+            for (std::vector<char>::iterator it = bytesToDecode.begin(); it != bytesToDecode.end(); ++it) {
+
+                std::cout<< it.operator*()<<std::endl;
+            }
             encoderDecoder->vectorToArray(bytesToDecode,packetToDecode);
+            for (int i=0;i<16;i++) {
+
+                std::cout<<packetToDecode[i]<<std::endl;
+            }
             packetFromServer = encoderDecoder->decodeBytes(packetToDecode,packetSize+6);
             break;
         }
@@ -243,39 +243,42 @@ BasePacket *ConnectionHandler::processServerPakect() {
             //void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom, int from) {
             mergeArrays(packetToDecode, opCodeArr,2, 0);
             mergeArrays(packetToDecode, blockNumberACK,2, 2);
-            std::cout << "mid ACK"<<std::endl;
 //            short blockNumber = encoderDecoder->bytesToShort(blockNumberACK[0], blockNumberACK[1]);
             packetFromServer = encoderDecoder->decodeBytes(packetToDecode,4);
-            std::cout << "after ACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
             break;
         }
             //ERROR
         case 5: {
-            std::cout << "inside ERROR"<<std::endl;
+            std::cout << "proccesing ERORR"<<std::endl;
+
             char errorCodeArr[2];
             getBytes(&errorCodeArr[0], 1);
             getBytes(&errorCodeArr[1], 1);
             encoderDecoder->arrayToVector(&bytesToDecode,errorCodeArr,2);
 //            short errorCode = encoderDecoder->bytesToShort(errorCodeArr[0], errorCodeArr[1]);
-            std::cout << "mid ERROR"<<std::endl;
             std::vector<char> errorMsg = getBytesUntilDelimeter();
             bytesToDecode.insert(std::end(bytesToDecode), std::begin(errorMsg), std::end(errorMsg));
-            std::cout << "mid2 ERROR"<<std::endl;
             int size=errorMsg.size() + 4;
             char *packetToEncode = new char[size];
             encoderDecoder->vectorToArray(bytesToDecode,packetToEncode);
-            std::cout << "mid3 ERROR"<<std::endl;
             packetFromServer = encoderDecoder->decodeBytes(packetToEncode,size);
-            std::cout << "end ERROR"<<std::endl;
             break;
         }
             //DBCAST
-        case 8: {
+        case 9: {
+            std::cout << "proccesing BCAST"<<std::endl;
             char addOrDel[1];
             getBytes(&addOrDel[0], 1);
             std::vector<char>fileNameVec = getBytesUntilDelimeter();
             int size=fileNameVec.size() + 3;
+            char fileNameArr[fileNameVec.size()];
+            encoderDecoder->vectorToArray(fileNameVec,fileNameArr);
             char *packetToEncode = new char[size];
+            mergeArrays(packetToEncode,opCodeArr,2,0);
+            mergeArrays(packetToEncode,addOrDel,1,2);
+            mergeArrays(packetToEncode,fileNameArr,fileNameVec.size(),3);
+
+
             packetFromServer = encoderDecoder->decodeBytes(packetToEncode,size);
             break;
         }

@@ -42,15 +42,18 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
 BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
     //char opCodearr;
     std::cout << "in decodeBytes" << std::endl;
+    for (int i=0;i<16;i++) {
+
+        std::cout<<bytes[i]<<std::endl;
+    }
     short op = bytesToShort(bytes[0], bytes[1]);
-    std::cout << "after bytesToShort with opCode" << op << std::endl;
     switch (op) {
         //DATA
         case 3: {
             //todo - handle current action
 
-            _packetSize = bytesToShort(bytes[2], bytes[3]);
-            _block = bytesToShort(bytes[4], bytes[5]);
+            short packetSize = bytesToShort(bytes[2], bytes[3]);
+            short block = bytesToShort(bytes[4], bytes[5]);
             return new DATAPacket(op,
                                   _packetSize,
                                   _block,
@@ -71,7 +74,8 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
         }
             //BCAST
         case 9: {
-            std::string fileName = bytesToString(getPartOfByteArray(bytes, 3, lengthOfArray - 1));
+            std::string fileName = bytesToString(getPartOfByteArray(bytes, 3, lengthOfArray));
+            //addor del
             return new BCASTPacket(bytes[2], fileName);
 
         }
@@ -83,7 +87,10 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
 
 
 std::string BidiEncoderDecoder::bytesToString(char bytes[]) {
-    return std::string(bytes);
+    //return std::string(bytes);
+    return std::string (bytes);
+
+
 }
 
 
@@ -98,21 +105,14 @@ char *BidiEncoderDecoder::getPartOfByteArray(char bytes[], int from, int to) {
 
 
 void BidiEncoderDecoder::shortToBytes(short num, char *bytesArr) {
-    std::cout << "inside shortToBytes" << std::endl;
     bytesArr[0] = ((num >> 8) & 0xFF);
-    std::cout << "1" << std::endl;
     bytesArr[1] = (num & 0xFF);
-    std::cout << "2" << std::endl;
 }
 
 std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
-    std::cout << "inside encodeInputTobytes" << std::endl;
     std::vector<std::string> lineSplited;
     boost::split(lineSplited, line, boost::is_any_of(" "));
 
-//    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
-
-    //char *bytes;
     char opCodeBytes[2];
     std::vector<char> bytesVec;
 
@@ -127,8 +127,6 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         //line splited.at(1)
          str = it->data();
     }
-    std::cout << "after splited" << std::endl;
-
     if (request == "RRQ") {
         this->fileName = str;
 
@@ -158,15 +156,10 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     } else if (request == "LOGRQ") {
         std::cout << "inside logrq" << std::endl;
         shortToBytes((short) 7, opCodeBytes);
-        std::cout << "after shortToBytes copy" << std::endl;
         arrayToVector(&bytesVec, opCodeBytes, 2);
-        std::cout << "after array to vector" << std::endl;
-        std::cout << "before copy" << std::endl;
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
-        std::cout << "after copy" << std::endl;
 
         bytesVec.push_back('\0');
-        std::cout << "end of logrq" << std::endl;
     } else if (request == "DELRQ") {
         this->fileName = str;
         shortToBytes((short) 8, opCodeBytes);
@@ -280,10 +273,7 @@ void BidiEncoderDecoder::vectorToArray(std::vector<char> vector, char *arr) {
 }
 
 short BidiEncoderDecoder::bytesToShort(char a, char b) {
-    std::cout << "before resoult with char: " << a << " and char: " << b << std::endl;
     short result = (short) ((a & 0xff) << 8);
-    std::cout << "mid bytesToShort" << std::endl;
     result += (short) (b & 0xff);
-    std::cout << "end bytesToShort with resoult: " << result << std::endl;
     return result;
 }

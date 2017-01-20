@@ -16,7 +16,11 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-
+using std::ifstream;
+using std::ios;
+using std::streampos;
+using std::cout;
+using std::endl;
 using namespace std;
 
 #include <iostream>
@@ -24,19 +28,16 @@ using namespace std;
 
 ServerListener::ServerListener(ConnectionHandler &handler) :
         _handler(handler),
-        _listenerType("server"),disconnedReq(false) {
-    std::cout << "c_tor server listener" << std::endl;
+        _listenerType("server"), disconnedReq(false) {
 
 }
 
 void ServerListener::run() {
     BidiEncoderDecoder *encoderDecoder;
     while (!_handler.shouldTerminate() && !disconnedReq) {
-        std::cout << "inside while server listener" << std::endl;
         BasePacket *packetFromServer;
 
         packetFromServer = _handler.processServerPakect();
-        std::cout << "After process packet in serverlistener" << std::endl;
         createResponse(packetFromServer);
 
     }
@@ -49,7 +50,19 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
         //DATA
         case 3: {
             char *data = (static_cast<DATAPacket *>(packetFromServer))->getData();
-            dataFromServer.insert(dataFromServer.end(), data, data + sizeof(data));
+            int size=(static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
+            for(int i=0;i<14;i++){
+                std::cout<<data[i]<<std::endl;
+            }
+            dataFromServer.insert(dataFromServer.end(), data, data + size );
+
+            int i = 0;
+            for (std::vector<char>::iterator it = dataFromServer.begin(); it != dataFromServer.end(); ++it) {
+
+                std::cout<< it.operator*()<<std::endl;
+            }
+
+
             short dataSize = (static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
             short blockNumber = (static_cast<DATAPacket *>(packetFromServer))->getBlockNum();
             //downloading
@@ -77,9 +90,17 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                 std::string blockString = to_string(blockNumber);
                 _handler.encodeAndSend("ACK " + blockString);
             }
-                //dir
+                //dirc
             else if (currentAct == 6) {
                 if (dataSize != 512) {
+                    std::vector<char>::iterator it=dataFromServer.begin();
+                    for(;it!=dataFromServer.end();it++){
+                        if(it.operator*() =='\0'){
+                            it.operator*()='\n';
+                        }
+                    }
+
+
                     std::string printDir(dataFromServer.begin(), dataFromServer.end());
                     std::cout << printDir << std::endl;
                     dataFromServer.clear();
@@ -95,44 +116,42 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                 case 2: {
                     (static_cast<ACKPacket *>(packetFromServer))->printACK();
                     short blockNum = (static_cast<ACKPacket *>(packetFromServer))->getBlockNum();
-                    if (blockNum == 0) {
-                        //open "filename" read from it to map of vectors of chars and send first packet
-                        std::ifstream stream;
-                        stream.open(_handler.getFileName(), std::ifstream::binary);
-                        long fileSize = stream.tellg();
-                        int countBlock = 1;
-                        int i = 0;
-                        while (i < fileSize) {
-                            for (int j = 0; j < 512 && i < fileSize; j++) {
-                                //todo check ++i
-                                dataMapToSend[countBlock].push_back(stream.get());
-                                stream.seekg(i);
-                                i++;
-                            }
-                            countBlock++;
+                    //open "filename" read from it to map of vectors of chars and send first packet
+                    std::ifstream stream;
+                    stream.open(_handler.getFileName(), ios::in | ios::binary | ios::ate);
+                    if (stream.is_open()) {
+                        streampos fileSize = stream.tellg();
+                        unsigned startFrom = (unsigned) (512 * blockNum);
+
+                        if (startFrom < fileSize) {
+                            stream.seekg(startFrom, ios::beg);
+                            short leftToRead = (short) (((unsigned)fileSize - startFrom) < 512) ?
+                                               ((unsigned)fileSize - startFrom) : 512;
+
+                            char* dataBytes=new char[leftToRead];
+                            stream.read(dataBytes, leftToRead);
+                            stream.close();
+                            char blockNumArr[2];
+                            shortToBytes(blockNum + 1, blockNumArr);
+                            char opCodeArr[2];
+                            shortToBytes((short) 3, opCodeArr);
+                            char leftToReadArr[2];
+                            shortToBytes(leftToRead, leftToReadArr);
+                            char dataBytesPacket[leftToRead+6];
+                            _handler.mergeArrays(dataBytesPacket, opCodeArr, 2, 0);
+                            _handler.mergeArrays(dataBytesPacket, leftToReadArr, 2, 2);
+                            _handler.mergeArrays(dataBytesPacket, blockNumArr, 2, 4);
+                            _handler.mergeArrays(dataBytesPacket, dataBytes, leftToRead, 6);
+                            std::cout<<dataBytesPacket[15]<<std::endl;
+                            _handler.sendBytes(dataBytesPacket, leftToRead + 6);
+                            delete (dataBytes);
+                        } else {
+                            std::cout << "WRQ " << _handler.getFileName() << " complete" << std::endl;
                         }
-                        stream.close();
-
                     }
-                    if (blockNum < dataMapToSend.size()) {
-                        DATAPacket *dataPacketToSend = new DATAPacket((short) dataMapToSend[blockNum + 1].size(),
-                                                                      blockNum + 1,
+                    else{
+                        std::cout << "Failed to open: "<<_handler.getFileName() << std::endl;
 
-                                                                      dataMapToSend[blockNum + 1].data());
-                        int sizeOfPacket = dataMapToSend[blockNum + 1].size() + 6;
-                        char *bytesToSend = new char[sizeOfPacket];
-                        shortToBytes(4, bytesToSend);
-                        char blockNumArr[2];
-                        shortToBytes(blockNum + 1, blockNumArr);
-                        char packetSizeArr[2];
-                        shortToBytes((short) sizeOfPacket, packetSizeArr);
-                        _handler.mergeArrays(bytesToSend, packetSizeArr, 2, 2);
-                        _handler.mergeArrays(bytesToSend, blockNumArr, 2, 4);
-
-                        _handler.sendBytes(bytesToSend, sizeOfPacket);
-                        delete[] bytesToSend;
-                    } else if (blockNum == dataMapToSend.size()) {
-                        dataMapToSend.clear();
                     }
                     break;
                 }
@@ -165,7 +184,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     } else {
                         std::cout << "cant disconnect" << std::endl;
                     }
-                    disconnedReq=true;
+                    disconnedReq = true;
                     break;
                 }
             }

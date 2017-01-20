@@ -26,7 +26,6 @@ private:
 
     std::map<std::string, short> opCodeMap;
 
-    void mergeArrays(char* insertTo,char *insertFrom,int from);
 
     DATAPacket *createDataPacket();
 

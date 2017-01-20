@@ -15,7 +15,6 @@ void KeyBoardListener::run() {
 
     while (!_handler.shouldTerminate() && !disconnedReq) {
 
-        std::cout << "inside while keyboard listener" << std::endl;
         char buf[_bufferSize];
         std::cin.getline(buf, _bufferSize);
         std::cout << "after get line" << std::endl;

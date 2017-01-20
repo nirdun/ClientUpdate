@@ -4,7 +4,7 @@
 
 BCASTPacket::BCASTPacket(char addOrDelete, const std::string &filename) {
     this->opCode = 9;
-    this->fileAdded = addOrDelete == '1' ? true : false;
+    this->fileAdded = addOrDelete == (short)1 ? true : false;
     this->Filename = filename;
 
 }
