@@ -17,6 +17,7 @@ private:
     std::vector<char> dataFromServer;
     void shortToBytes(short num, char *bytesArr);
     std::map<int,std::vector<char> > dataMapToSend;
+    bool disconnedReq;
 public:
     ServerListener(ConnectionHandler& handler);
     void run();

@@ -10,7 +10,6 @@
 #include "../include/Packets/BCASTPacket.h"
 
 
-
 #include <string>
 #include <vector>
 #include <iostream>
@@ -25,7 +24,7 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
         _opCode(0),
         _block(0),
         _packetSize(0),
-        _counterRead(0) {
+        _counterRead(0){
     byteArr = std::vector<char>(1024);
     opCodeMap.clear();
     opCodeMap["RRQ"] = 1;
@@ -40,11 +39,11 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
     opCodeMap["DISC"] = 10;
 }
 
-BasePacket *BidiEncoderDecoder::decodeBytes(char* bytes,int lengthOfArray) {
+BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
     //char opCodearr;
-    std::cout << "in decodeBytes"<<std::endl;
+    std::cout << "in decodeBytes" << std::endl;
     short op = bytesToShort(bytes[0], bytes[1]);
-    std::cout << "after bytesToShort with opCode" << op <<std::endl;
+    std::cout << "after bytesToShort with opCode" << op << std::endl;
     switch (op) {
         //DATA
         case 3: {
@@ -60,10 +59,8 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char* bytes,int lengthOfArray) {
             //ACK
         case 4: {
             short block = bytesToShort(bytes[2], bytes[3]);
-            std::cout << "creating ACKPacket with block: "<< block <<std::endl;
-            ACKPacket* pak = new ACKPacket(block);
-            std::cout << "OpCode: " << pak->getOpCode() << " blockNumber: " << pak->getBlockNum() <<std::endl;
-            return pak;
+            std::cout << "creating ACKPacket with block: " << block << std::endl;
+            return new ACKPacket(block);
         }
             //ERROR
         case 5: {
@@ -90,7 +87,6 @@ std::string BidiEncoderDecoder::bytesToString(char bytes[]) {
 }
 
 
-
 char *BidiEncoderDecoder::getPartOfByteArray(char bytes[], int from, int to) {
     int size = to - from;
     char *newArray = new char[size];
@@ -102,21 +98,17 @@ char *BidiEncoderDecoder::getPartOfByteArray(char bytes[], int from, int to) {
 
 
 void BidiEncoderDecoder::shortToBytes(short num, char *bytesArr) {
-    std::cout << "inside shortToBytes"<<std::endl;
+    std::cout << "inside shortToBytes" << std::endl;
     bytesArr[0] = ((num >> 8) & 0xFF);
-    std::cout << "1"<<std::endl;
+    std::cout << "1" << std::endl;
     bytesArr[1] = (num & 0xFF);
-    std::cout << "2"<<std::endl;
+    std::cout << "2" << std::endl;
 }
 
 std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
-    std::cout << "inside encodeInputTobytes"<<std::endl;
-
-
-    std::cout << "after map"<<std::endl;
-
+    std::cout << "inside encodeInputTobytes" << std::endl;
     std::vector<std::string> lineSplited;
-    boost::split(lineSplited,line,boost::is_any_of(" "));
+    boost::split(lineSplited, line, boost::is_any_of(" "));
 
 //    std::cout <<lineSplited.at(0)<<"      "<<lineSplited.at(1)<<std::endl;
 
@@ -127,64 +119,65 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     vector<string>::iterator it;
 
     //line splited.at(0)
-    it=lineSplited.begin();
-    string request=it->data();
+    it = lineSplited.begin();
+    string request = it->data();
+    string str;
+    if (lineSplited.size() > 1) {
+        it++;
+        //line splited.at(1)
+         str = it->data();
+    }
+    std::cout << "after splited" << std::endl;
 
-    it++;
-    //line splited.at(1)
-    string str=it->data();
-    std::cout <<"after splited"<<std::endl;
-
-    if(request=="RRQ"){
+    if (request == "RRQ") {
         this->fileName = str;
 
-        shortToBytes(1, opCodeBytes);
-        arrayToVector(&bytesVec,opCodeBytes,2);
+        shortToBytes((short)1, opCodeBytes);
+        arrayToVector(&bytesVec, opCodeBytes, 2);
         //inssert file name as chars
         std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
 
 
-    }
-    else if(request=="WRQ"){
-        this->fileName = str;
+    } else if (request == "WRQ") {
+        BidiEncoderDecoder::fileName = str;
 //        bytes = new char[this->fileName.length() + 3];
-        shortToBytes((short)2, opCodeBytes);
-        arrayToVector(&bytesVec,opCodeBytes,2);
+        shortToBytes((short) 2, opCodeBytes);
+        arrayToVector(&bytesVec, opCodeBytes, 2);
         std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
         bytesVec.push_back('\0');
-    }else if(request=="ACK"){
+    } else if (request == "ACK") {
         //todo disc shoult termintae
-        shortToBytes((short)4, opCodeBytes);
-        arrayToVector(&bytesVec,opCodeBytes,2);
+        shortToBytes((short) 4, opCodeBytes);
+        arrayToVector(&bytesVec, opCodeBytes, 2);
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
 
-    }else if(request=="DIRQ"){
-        shortToBytes((short)6, opCodeBytes);
-        arrayToVector(&bytesVec,opCodeBytes,2);
+    } else if (request == "DIRQ") {
+        shortToBytes((short) 6, opCodeBytes);
+        arrayToVector(&bytesVec, opCodeBytes, 2);
 
-    }else if(request=="LOGRQ"){
-        std::cout << "inside logrq"<<std::endl;
-        shortToBytes((short)7, opCodeBytes);
-        std::cout << "after shortToBytes copy"<<std::endl;
-        arrayToVector(&bytesVec,opCodeBytes,2);
-        std::cout << "after array to vector"<<std::endl;
-        std::cout << "before copy"<<std::endl;
+    } else if (request == "LOGRQ") {
+        std::cout << "inside logrq" << std::endl;
+        shortToBytes((short) 7, opCodeBytes);
+        std::cout << "after shortToBytes copy" << std::endl;
+        arrayToVector(&bytesVec, opCodeBytes, 2);
+        std::cout << "after array to vector" << std::endl;
+        std::cout << "before copy" << std::endl;
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
-        std::cout << "after copy"<<std::endl;
+        std::cout << "after copy" << std::endl;
 
         bytesVec.push_back('\0');
-        std::cout << "end of logrq"<<std::endl;
-    }else if(request=="DELRQ"){
+        std::cout << "end of logrq" << std::endl;
+    } else if (request == "DELRQ") {
         this->fileName = str;
-        shortToBytes((short)8, opCodeBytes);
-        arrayToVector(&bytesVec,opCodeBytes,2);
+        shortToBytes((short) 8, opCodeBytes);
+        arrayToVector(&bytesVec, opCodeBytes, 2);
         std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
         bytesVec.push_back('\0');
-    }else if(request=="DISC"){
-        shortToBytes((short)6, opCodeBytes);
-        arrayToVector(&bytesVec,opCodeBytes,2);
+    } else if (request == "DISC") {
+        shortToBytes((short) 10, opCodeBytes);
+        arrayToVector(&bytesVec, opCodeBytes, 2);
 
-    }else{
+    } else {
         std::cout << "something wrong ---";
 
     }
@@ -250,7 +243,7 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
 //
 //
 //    }
-    std::cout << "before return"<<std::endl;
+    std::cout << "before return" << std::endl;
 
     return bytesVec;
 
@@ -268,29 +261,29 @@ std::string BidiEncoderDecoder::getFileName() {
     return this->fileName;
 }
 
-void BidiEncoderDecoder::arrayToVector(std::vector<char> *v,char* arr,int size){
-    for(int i=0;i<size;i++){
+void BidiEncoderDecoder::arrayToVector(std::vector<char> *v, char *arr, int size) {
+    for (int i = 0; i < size; i++) {
         (*v).push_back(arr[i]);
     }
 }
 
 
-void BidiEncoderDecoder::vectorToArray(std::vector<char> vector,char *arr){
+void BidiEncoderDecoder::vectorToArray(std::vector<char> vector, char *arr) {
     std::vector<char>::iterator it;
-    int i=0;
-    for(std::vector<char>::iterator it = vector.begin(); it != vector.end(); ++it) {
+    int i = 0;
+    for (std::vector<char>::iterator it = vector.begin(); it != vector.end(); ++it) {
 
-        arr[i]=it.operator*();
+        arr[i] = it.operator*();
         i++;
     }
 
 }
 
 short BidiEncoderDecoder::bytesToShort(char a, char b) {
-    std::cout << "before resoult with char: " << a <<" and char: "<< b<< std::endl;
+    std::cout << "before resoult with char: " << a << " and char: " << b << std::endl;
     short result = (short) ((a & 0xff) << 8);
-    std::cout << "mid bytesToShort"<<std::endl;
+    std::cout << "mid bytesToShort" << std::endl;
     result += (short) (b & 0xff);
-    std::cout << "end bytesToShort with resoult: "<< result <<std::endl;
+    std::cout << "end bytesToShort with resoult: " << result << std::endl;
     return result;
 }

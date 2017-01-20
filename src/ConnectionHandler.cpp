@@ -19,7 +19,8 @@ ConnectionHandler::ConnectionHandler(string host, short port) :
         io_service_(),
         socket_(io_service_),
         _currentAction(0),
-        _connected(true),encoderDecoder() {
+        _connected(true) {
+    encoderDecoder = new BidiEncoderDecoder();
     currentActionMap["regular"]=1;
     currentActionMap["download"]=2;
     currentActionMap["upload"]=3;

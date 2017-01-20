@@ -5,7 +5,7 @@
 
 class ACKPacket : public BasePacket {
 private:
-    short blockNum = 0;
+    short blockNum ;
 
 public:
     ACKPacket();

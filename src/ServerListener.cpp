@@ -24,19 +24,19 @@ using namespace std;
 
 ServerListener::ServerListener(ConnectionHandler &handler) :
         _handler(handler),
-        _listenerType("server") {
-    std::cout << "c_tor server listener"<<std::endl;
+        _listenerType("server"),disconnedReq(false) {
+    std::cout << "c_tor server listener" << std::endl;
 
 }
 
 void ServerListener::run() {
     BidiEncoderDecoder *encoderDecoder;
-    while (!_handler.shouldTerminate()) {
-        std::cout << "inside while server listener"<<std::endl;
+    while (!_handler.shouldTerminate() && !disconnedReq) {
+        std::cout << "inside while server listener" << std::endl;
         BasePacket *packetFromServer;
 
         packetFromServer = _handler.processServerPakect();
-        std::cout << "After process packet in serverlistener"<<std::endl;
+        std::cout << "After process packet in serverlistener" << std::endl;
         createResponse(packetFromServer);
 
     }
@@ -114,8 +114,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                         stream.close();
 
                     }
-                    if (blockNum < dataMapToSend.size())
-                    {
+                    if (blockNum < dataMapToSend.size()) {
                         DATAPacket *dataPacketToSend = new DATAPacket((short) dataMapToSend[blockNum + 1].size(),
                                                                       blockNum + 1,
 
@@ -127,12 +126,12 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                         shortToBytes(blockNum + 1, blockNumArr);
                         char packetSizeArr[2];
                         shortToBytes((short) sizeOfPacket, packetSizeArr);
-                        _handler.mergeArrays(bytesToSend, packetSizeArr,2, 2);
-                        _handler.mergeArrays(bytesToSend, blockNumArr,2, 4);
+                        _handler.mergeArrays(bytesToSend, packetSizeArr, 2, 2);
+                        _handler.mergeArrays(bytesToSend, blockNumArr, 2, 4);
 
                         _handler.sendBytes(bytesToSend, sizeOfPacket);
                         delete[] bytesToSend;
-                    }else if (blockNum == dataMapToSend.size()) {
+                    } else if (blockNum == dataMapToSend.size()) {
                         dataMapToSend.clear();
                     }
                     break;
@@ -166,20 +165,24 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     } else {
                         std::cout << "cant disconnect" << std::endl;
                     }
+                    disconnedReq=true;
                     break;
                 }
             }
+            break;
             //todo check if you can do something while uploading
 
         }
             //ERROR
         case 5: {
             static_cast<ERRORPacket *> (packetFromServer)->printError();
+            break;
 
         }
             //BCAST
         case 9: {
             static_cast<BCASTPacket *> (packetFromServer)->printMessage();
+            break;
         }
     }
 }

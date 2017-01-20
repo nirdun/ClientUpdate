@@ -13,6 +13,7 @@ private:
     std::string _listenerType;
     ConnectionHandler &_handler;
     const short _bufferSize;
+    bool disconnedReq;
 
 
 public:

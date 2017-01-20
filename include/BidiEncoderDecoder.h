@@ -22,6 +22,8 @@ private:
     int _counterRead;
     std::vector<char> byteArr;
     std::string fileName;
+
+
     std::map<std::string, short> opCodeMap;
 
     void mergeArrays(char* insertTo,char *insertFrom,int from);

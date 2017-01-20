@@ -41,6 +41,7 @@ void ERRORPacket::difineErrMsg() {
             break;
         default:
             ErrMsg = "Wrong error code insert";
+            break;
 
     }
 }
