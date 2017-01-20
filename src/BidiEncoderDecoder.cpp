@@ -17,6 +17,7 @@
 #include <string.h>
 #include <iterator>
 #include <algorithm>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 
@@ -41,11 +42,6 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
 
 BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
     //char opCodearr;
-    std::cout << "in decodeBytes" << std::endl;
-    for (int i=0;i<16;i++) {
-
-        std::cout<<bytes[i]<<std::endl;
-    }
     short op = bytesToShort(bytes[0], bytes[1]);
     switch (op) {
         //DATA
@@ -55,14 +51,13 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
             short packetSize = bytesToShort(bytes[2], bytes[3]);
             short block = bytesToShort(bytes[4], bytes[5]);
             return new DATAPacket(op,
-                                  _packetSize,
-                                  _block,
+                                  packetSize,
+                                  block,
                                   getPartOfByteArray(bytes, 6, lengthOfArray));
         }
             //ACK
         case 4: {
             short block = bytesToShort(bytes[2], bytes[3]);
-            std::cout << "creating ACKPacket with block: " << block << std::endl;
             return new ACKPacket(block);
         }
             //ERROR
@@ -134,7 +129,7 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         arrayToVector(&bytesVec, opCodeBytes, 2);
         //inssert file name as chars
         std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
-
+        bytesVec.push_back('\0');
 
     } else if (request == "WRQ") {
         BidiEncoderDecoder::fileName = str;
@@ -147,14 +142,18 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         //todo disc shoult termintae
         shortToBytes((short) 4, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
-        std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
+        short block = boost::lexical_cast<short>(str);
+        char blockNumArr[2];
+        shortToBytes(block,blockNumArr);
+        arrayToVector(&bytesVec, blockNumArr, 2);
+
+//        std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
 
     } else if (request == "DIRQ") {
         shortToBytes((short) 6, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
 
     } else if (request == "LOGRQ") {
-        std::cout << "inside logrq" << std::endl;
         shortToBytes((short) 7, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
@@ -174,70 +173,6 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         std::cout << "something wrong ---";
 
     }
-
-
-//
-//    switch (opCodeMap.at(lineSplited.at(0))) {
-//        //RRQ
-//        case 1:
-//
-//            this->fileName = lineSplited.at(1);
-//            bytes = new char[this->fileName.length() + 3];
-//            shortToBytes(1, bytes);
-//            addStringToBytes(fileName, bytes, 2);
-//            bytes[this->fileName.length() + 2] = '\0';
-//            break;
-//            //WRQ
-//        case 2:
-//            this->fileName = lineSplited.at(1);
-//            bytes = new char[this->fileName.length() + 3];
-//            shortToBytes(2, bytes);
-//            addStringToBytes(fileName, bytes, 2);
-//            bytes[this->fileName.length() + 2] = '\0';
-//            break;
-//        case 4:
-//            bytes = new char[4];
-//            shortToBytes(4, bytes);
-//            addStringToBytes(lineSplited.at(1), bytes, 2);
-//
-//            break;
-//            //DIRQ
-//        case 6:
-//            bytes = new char[2];
-//            shortToBytes((short)6, bytes);
-//            break;
-//            //LOGRQ
-//        case 7:
-//        std::string use=lineSplited.at(1);
-//            std::cout << "inside logrq"<<std::endl;
-//
-//            this->userName = lineSplited.at(1);
-//            bytes = new char[this->userName.length() + 3];
-//            shortToBytes(7, bytes);
-//            addStringToBytes(userName, bytes, 2);
-//            bytes[this->userName.length() + 2] = '\0';
-//            std::cout << "inside logrq"<<std::endl;
-//            break;
-//            //DELRQ
-//        case 8:
-//            this->fileName = lineSplited.at(1);
-//            bytes = new char[this->fileName.length() + 3];
-//            shortToBytes(8, bytes);
-//            addStringToBytes(fileName, bytes, 2);
-//            bytes[this->fileName.length() + 2] = '\0';
-//            break;
-//            //DISC
-//        case 10:
-//            bytes = new char[2];
-//            shortToBytes(6, bytes);
-//            break;
-//        default:
-//            std::cout << "something wrong";
-//
-//
-//    }
-    std::cout << "before return" << std::endl;
-
     return bytesVec;
 
 }

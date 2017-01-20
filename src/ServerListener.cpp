@@ -16,7 +16,9 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+
 using std::ifstream;
+using std::ofstream;
 using std::ios;
 using std::streampos;
 using std::cout;
@@ -48,55 +50,43 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
     short currentAct = _handler.getCurrentAction();
     switch (packetFromServer->getOpCode()) {
         //DATA
+
         case 3: {
             char *data = (static_cast<DATAPacket *>(packetFromServer))->getData();
-            int size=(static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
-            for(int i=0;i<14;i++){
-                std::cout<<data[i]<<std::endl;
-            }
-            dataFromServer.insert(dataFromServer.end(), data, data + size );
-
-            int i = 0;
-            for (std::vector<char>::iterator it = dataFromServer.begin(); it != dataFromServer.end(); ++it) {
-
-                std::cout<< it.operator*()<<std::endl;
-            }
-
+            int size = (static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
+            dataFromServer.insert(dataFromServer.end(), data, data + size);
 
             short dataSize = (static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
             short blockNumber = (static_cast<DATAPacket *>(packetFromServer))->getBlockNum();
             //downloading
             if (currentAct == 1) {
-                if (dataSize != 512) {
-                    std::ofstream stream;
-                    if (boost::filesystem::exists(_handler.getFileName())) {
-                        stream.open("./" + _handler.getFileName(), std::ofstream::binary | std::ofstream::app);
-                    } else {//file exist
-                        stream.open("./" + _handler.getFileName(),
-                                    std::ofstream::binary | std::ofstream::app | std::ofstream::trunc);
+                /////
 
+
+                std::ofstream stream;
+                string currFileName = _handler.getFileName();
+                stream.open(_handler.getFileName(), ios::out | ios::app | ios::binary);
+                if (stream.is_open()) {
+                    if (dataSize > 0) {
+                        stream.write(data, dataSize);
                     }
-
-                    if (stream.is_open()) {
-                        for (unsigned int i = 0; i < dataFromServer.size(); i++) {
-                            stream.put(dataFromServer.at(i));
-                        }
-                        stream.close();
-                    }
-                    delete (data);
-                    dataFromServer.clear();
-
+                    stream.close();
                 }
                 std::string blockString = to_string(blockNumber);
                 _handler.encodeAndSend("ACK " + blockString);
+                if (dataSize < 512) {
+                    std::cout << "RRQ " << currFileName << " complete" << std::endl;
+                }
+                delete (data);
+
             }
                 //dirc
             else if (currentAct == 6) {
                 if (dataSize != 512) {
-                    std::vector<char>::iterator it=dataFromServer.begin();
-                    for(;it!=dataFromServer.end();it++){
-                        if(it.operator*() =='\0'){
-                            it.operator*()='\n';
+                    std::vector<char>::iterator it = dataFromServer.begin();
+                    for (; it != dataFromServer.end(); it++) {
+                        if (it.operator*() == '\0') {
+                            it.operator*() = '\n';
                         }
                     }
 
@@ -125,10 +115,10 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
 
                         if (startFrom < fileSize) {
                             stream.seekg(startFrom, ios::beg);
-                            short leftToRead = (short) (((unsigned)fileSize - startFrom) < 512) ?
-                                               ((unsigned)fileSize - startFrom) : 512;
+                            short leftToRead = (short) (((unsigned) fileSize - startFrom) < 512) ?
+                                               ((unsigned) fileSize - startFrom) : 512;
 
-                            char* dataBytes=new char[leftToRead];
+                            char *dataBytes = new char[leftToRead];
                             stream.read(dataBytes, leftToRead);
                             stream.close();
                             char blockNumArr[2];
@@ -137,20 +127,18 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                             shortToBytes((short) 3, opCodeArr);
                             char leftToReadArr[2];
                             shortToBytes(leftToRead, leftToReadArr);
-                            char dataBytesPacket[leftToRead+6];
+                            char dataBytesPacket[leftToRead + 6];
                             _handler.mergeArrays(dataBytesPacket, opCodeArr, 2, 0);
                             _handler.mergeArrays(dataBytesPacket, leftToReadArr, 2, 2);
                             _handler.mergeArrays(dataBytesPacket, blockNumArr, 2, 4);
                             _handler.mergeArrays(dataBytesPacket, dataBytes, leftToRead, 6);
-                            std::cout<<dataBytesPacket[15]<<std::endl;
                             _handler.sendBytes(dataBytesPacket, leftToRead + 6);
                             delete (dataBytes);
                         } else {
                             std::cout << "WRQ " << _handler.getFileName() << " complete" << std::endl;
                         }
-                    }
-                    else{
-                        std::cout << "Failed to open: "<<_handler.getFileName() << std::endl;
+                    } else {
+                        std::cout << "Failed to open: " << _handler.getFileName() << std::endl;
 
                     }
                     break;
@@ -161,6 +149,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     if (blockNum == 0) {
                         (static_cast<ACKPacket *>(packetFromServer))->printACK();
                     } else {
+                        //todo replace
                         std::cout << "Wrong Ack Block Number inside server listener" << std::endl;
                     }
                     break;

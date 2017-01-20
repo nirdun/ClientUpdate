@@ -7,8 +7,6 @@ KeyBoardListener::KeyBoardListener(ConnectionHandler &handler) :
         _listenerType("keyboard"),
         _handler(handler),
         _bufferSize(1024),disconnedReq(false) {
-    std::cout << "c_tor keyboard listener" << std::endl;
-
 }
 
 void KeyBoardListener::run() {
@@ -17,7 +15,6 @@ void KeyBoardListener::run() {
 
         char buf[_bufferSize];
         std::cin.getline(buf, _bufferSize);
-        std::cout << "after get line" << std::endl;
 
         std::string line(buf);
         disconnedReq = line == "DISC";
