@@ -17,7 +17,6 @@ void KeyBoardListener::run() {
 
         std::string line(buf);
         if (!_handler.encodeAndSend(line)) {
-            //todo check if should sync
             continue;
         }
         if(_handler.isLoggedIn()){
@@ -25,8 +24,6 @@ void KeyBoardListener::run() {
 
 
         }
-// connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
-        //todo delete prints
 
     }
 }

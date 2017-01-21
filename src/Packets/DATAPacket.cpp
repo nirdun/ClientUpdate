@@ -24,7 +24,6 @@ short DATAPacket::getBlockNum() {
 
 
 char* DATAPacket::getData() {
-    //todo - clone?
     return data;
 }
 DATAPacket::~DATAPacket() {}

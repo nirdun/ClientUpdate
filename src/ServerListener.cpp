@@ -173,7 +173,6 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
 
             }
             break;
-            //todo check if you can do something while uploading
 
         }
             //ERROR

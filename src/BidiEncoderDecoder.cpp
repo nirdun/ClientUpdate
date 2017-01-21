@@ -39,7 +39,6 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
     switch (op) {
         //DATA
         case 3: {
-            //todo - handle current action
 
             short packetSize = bytesToShort(bytes[2], bytes[3]);
             short block = bytesToShort(bytes[4], bytes[5]);
@@ -134,6 +133,7 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
 
         shortToBytes((short) 1, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
+        this->fileName = str;
         //inssert file name as chars
         std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
         bytesVec.push_back('\0');
@@ -150,7 +150,6 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         }
 
     } else if (request == "ACK") {
-        //todo disc shoult termintae
         shortToBytes((short) 4, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
         short block = boost::lexical_cast<short>(str);
