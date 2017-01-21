@@ -1,6 +1,4 @@
-//
-// Created by ניר דוניץ on 16.1.2017.
-//
+
 #pragma once
 #ifndef CLIENT_CONNECTIONHANDLER_H
 #define CLIENT_CONNECTIONHANDLER_H
