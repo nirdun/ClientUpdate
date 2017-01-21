@@ -22,7 +22,6 @@ public:
 
     void createResponse(BasePacket *packet);
 
-    void recievingData(std::vector<char> vector);
 };
 
 

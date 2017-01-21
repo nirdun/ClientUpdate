@@ -24,7 +24,8 @@ using namespace std;
 
 ServerListener::ServerListener(ConnectionHandler &handler) :
         _handler(handler),
-         disconnectedReq(false),dataFromServer(){
+         dataFromServer() {
+    disconnectedReq==false;
 
 }
 
@@ -127,7 +128,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                             _handler.mergeArrays(dataBytesPacket, blockNumArr, 2, 4);
                             _handler.mergeArrays(dataBytesPacket, dataBytes, leftToRead, 6);
                             _handler.sendBytes(dataBytesPacket, leftToRead + 6);
-                            delete []dataBytes;
+                            delete[]dataBytes;
                         } else {
                             std::cout << "WRQ " << _handler.getFileName() << " complete" << std::endl;
                         }
@@ -170,8 +171,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     disconnectedReq = true;
                     break;
                 }
-                defualt:
-                    break;
+
             }
             break;
             //todo check if you can do something while uploading

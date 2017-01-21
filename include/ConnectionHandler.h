@@ -14,8 +14,6 @@ using boost::asio::ip::tcp;
 
 class ConnectionHandler {
 private:
-    std::string _host;
-    short _port;
     short _currentAction;
     bool _connected;
     const std::string host_;
@@ -24,7 +22,6 @@ private:
     tcp::socket socket_;
     //std::map <std::string, int> _currentActionMap;
     BidiEncoderDecoder* encoderDecoder;
-    std::map<std::string,short >currentActionMap;
 
 public:
     ConnectionHandler(ConnectionHandler& connectionHandler);

@@ -21,11 +21,6 @@ ConnectionHandler::ConnectionHandler(string host, short port) :
         _currentAction(0),
         _connected(true) {
     encoderDecoder = new BidiEncoderDecoder();
-    currentActionMap["regular"] = 1;
-    currentActionMap["download"] = 2;
-    currentActionMap["upload"] = 3;
-    currentActionMap["dirlist"] = 4;
-    currentActionMap["diconnect"] = 5;
 
 }
 
@@ -45,12 +40,12 @@ ConnectionHandler::ConnectionHandler(ConnectionHandler &connectionHandler) :
 }
 
 std::string ConnectionHandler::getHost() {
-    return _host;
+    return host_;
 
 }
 
 short ConnectionHandler::getPort() {
-    return _port;
+    return port_;
 }
 
 
@@ -277,7 +272,7 @@ BasePacket *ConnectionHandler::processServerPakect() {
 
 
 void ConnectionHandler::mergeArrays(char *insertTo, char *insertFrom, int sizeOfInsertFrom, int from) {
-    for (unsigned int i = from; i < from + sizeOfInsertFrom; i++) {
+    for (int i = from; i < from + sizeOfInsertFrom; i++) {
         insertTo[i] = insertFrom[i - from];
     }
 
