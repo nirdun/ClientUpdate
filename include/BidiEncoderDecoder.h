@@ -18,16 +18,12 @@ private:
     short _block;
     int _counterRead;
     std::string fileName;
-public:
-    virtual ~BidiEncoderDecoder();
-
-private:
-
     void shortToBytes(short num, char *bytesArr);
     char * getPartOfByteArray(char bytes[], int from, int to);
 
 
 public:
+    virtual ~BidiEncoderDecoder();
     BidiEncoderDecoder();
     std::string getFileName();
     void vectorToArray(std::vector<char> vector,char *arr);

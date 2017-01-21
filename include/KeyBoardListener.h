@@ -9,9 +9,11 @@
 #include "ConnectionHandler.h"
 
 class KeyBoardListener {
-private:
 public:
     virtual ~KeyBoardListener();
+    KeyBoardListener(ConnectionHandler &handler);
+
+    void run();
 
 private:
     ConnectionHandler &_handler;
@@ -19,10 +21,6 @@ private:
     bool disconnectedReq;
 
 
-public:
-    KeyBoardListener(ConnectionHandler &handler);
-
-    void run();
 
 };
 

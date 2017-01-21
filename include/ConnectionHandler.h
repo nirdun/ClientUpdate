@@ -30,6 +30,7 @@ public:
     std::string getHost();
     short getPort();
     std::string getFileName();
+    virtual ~ConnectionHandler();
     ConnectionHandler(const ConnectionHandler &handler);
     void setCurrentAction(short currentAction);
     short getCurrentAction() ;
@@ -45,8 +46,6 @@ public:
     BasePacket *processServerPakect();
 
     void terminate();
-
-     ~ConnectionHandler();
 
     // Connect to the remote machine
     bool connect();

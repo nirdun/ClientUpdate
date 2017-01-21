@@ -65,7 +65,6 @@ void ConnectionHandler::terminate() {
 }
 
 ConnectionHandler::~ConnectionHandler() {
-    close();
 }
 
 bool ConnectionHandler::connect() {

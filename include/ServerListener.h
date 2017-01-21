@@ -26,9 +26,4 @@ public:
 
 };
 
-ServerListener::~ServerListener() {
-
-}
-
-
 #endif //CLIENT_SERVERLISTENER_H
