@@ -171,6 +171,10 @@ bool ConnectionHandler::encodeAndSend(std::string line) {
     //todo sync?
     std::vector<char> packetBytes = encoderDecoder->encodeInputTobytes(line);
 
+    //input qrong return false
+    if(packetBytes.size()==0){
+        return false;
+    }
     //todo check if LogIn Is the First Packet to send
 
     std::vector<char>::iterator it;

@@ -152,7 +152,7 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         arrayToVector(&bytesVec, opCodeBytes, 2);
 
     } else {
-        std::cout << "something wrong ---";
+        std::cout << "wrong input"<<std::endl;
 
     }
     return bytesVec;

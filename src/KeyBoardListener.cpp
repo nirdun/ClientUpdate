@@ -18,7 +18,6 @@ void KeyBoardListener::run() {
         std::string line(buf);
         if (!_handler.encodeAndSend(line)) {
             //todo check if should sync
-            std::cout << "something went wrong whilee sending... \n" << std::endl;
             continue;
         }
         if(_handler.isLoggedIn()){
