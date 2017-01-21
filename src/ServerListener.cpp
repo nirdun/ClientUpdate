@@ -163,7 +163,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     short blockNum = (static_cast<ACKPacket *>(packetFromServer))->getBlockNum();
                     if (blockNum == 0) {
                         (static_cast<ACKPacket *>(packetFromServer))->printACK();
-                        _handler.shouldTerminate();
+                        _handler.terminate();
                     } else {
                         std::cout << "cant disconnect" << std::endl;
                     }
