@@ -58,6 +58,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
 
             short dataSize = (static_cast<DATAPacket *>(packetFromServer))->getPacketSize();
             short blockNumber = (static_cast<DATAPacket *>(packetFromServer))->getBlockNum();
+
             //downloading
             if (currentAct == 1) {
                 /////
