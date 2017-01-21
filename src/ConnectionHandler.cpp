@@ -170,7 +170,6 @@ void ConnectionHandler::close() {
 bool ConnectionHandler::encodeAndSend(std::string line) {
     //todo sync?
     std::vector<char> packetBytes = encoderDecoder->encodeInputTobytes(line);
-//    char *packetBytes = encoderDecoder->encodeInputTobytes(line);
 
     //todo check if LogIn Is the First Packet to send
 

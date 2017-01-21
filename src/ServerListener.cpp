@@ -106,12 +106,13 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     stream.open(_handler.getFileName(), ios::in | ios::binary | ios::ate);
                     if (stream.is_open()) {
                         streampos fileSize = stream.tellg();
+                        std::cout << "size:  " << fileSize << std::endl;
                         unsigned startFrom = (unsigned) (512 * blockNum);
 
-                        if (startFrom < fileSize) {
+                        if (startFrom <= fileSize) {
                             stream.seekg(startFrom, ios::beg);
-                            short leftToRead = (short) (((unsigned) fileSize - startFrom) < 512) ?
-                                               ((unsigned) fileSize - startFrom) : 512;
+                            short leftToRead = (short) ((short) (((unsigned) fileSize - startFrom) < 512) ?
+                                                        ((unsigned) fileSize - startFrom) : 512);
 
                             char *dataBytes = new char[leftToRead];
                             stream.read(dataBytes, leftToRead);
