@@ -1,6 +1,10 @@
 #include <iostream>
 #include "../../include/Packets/ACKPacket.h"
 
+
+ACKPacket::ACKPacket(const ACKPacket &ackPacket):blockNum(ackPacket.blockNum) {}
+
+
 ACKPacket::ACKPacket():blockNum(0) {
     this->opCode = 4;
 }

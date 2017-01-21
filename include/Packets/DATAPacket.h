@@ -11,6 +11,7 @@ private:
     char* data;
     short packetSize;
     short blockNum ;
+    DATAPacket(const DATAPacket &dATAPacket);
 
 public:
     DATAPacket(short opCode, short size, short block, char bytes[]);

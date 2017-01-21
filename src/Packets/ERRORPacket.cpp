@@ -6,7 +6,7 @@ ERRORPacket::ERRORPacket(short errorType):ErrorCode(errorType),ErrMsg("") {
     defineErrMsg();
 }
 ERRORPacket::~ERRORPacket(){}
-
+ERRORPacket::ERRORPacket(const ERRORPacket &eRRORPacket):ErrMsg(eRRORPacket.ErrMsg) {}
 
 ERRORPacket::ERRORPacket(short errorType, const std::string &errMsg):ErrorCode(errorType),ErrMsg(errMsg) {
     this->opCode=5;

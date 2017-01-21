@@ -5,11 +5,11 @@
 
 class ACKPacket : public BasePacket {
 private:
+    ACKPacket(const ACKPacket &ackPacket);
     short blockNum ;
 
 public:
     ACKPacket();
-
 
     ACKPacket(short blockNum);
 

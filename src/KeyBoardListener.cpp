@@ -23,6 +23,7 @@ void KeyBoardListener::run() {
         if(_handler.isLoggedIn()){
             disconnectedReq = line == "DISC";
 
+
         }
 // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
         //todo delete prints

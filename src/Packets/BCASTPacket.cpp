@@ -8,6 +8,7 @@ BCASTPacket::BCASTPacket(char addOrDelete, const std::string &filename):Filename
 
 }
 
+BCASTPacket::BCASTPacket(const BCASTPacket &bCASTPacket):fileAdded(bCASTPacket.fileAdded){}
 
 BCASTPacket::~BCASTPacket() {}
 void BCASTPacket::printMessage() {

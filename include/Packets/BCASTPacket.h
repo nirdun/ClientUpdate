@@ -14,7 +14,7 @@ public:
     BCASTPacket(char addOrDelete, const std::string &filename);
 
     BCASTPacket(const std::string &filename);
-
+    BCASTPacket(const BCASTPacket &bCASTPacket);
 
     virtual ~BCASTPacket();
     void printMessage();

@@ -106,17 +106,19 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     stream.open(_handler.getFileName(), ios::in | ios::binary | ios::ate);
                     if (stream.is_open()) {
                         streampos fileSize = stream.tellg();
-                        std::cout << "size:  " << fileSize << std::endl;
                         unsigned startFrom = (unsigned) (512 * blockNum);
 
+                        //
                         if (startFrom <= fileSize) {
                             stream.seekg(startFrom, ios::beg);
-                            short leftToRead = (short) ((short) (((unsigned) fileSize - startFrom) < 512) ?
+                            unsigned int leftToRead = ((((unsigned) fileSize - startFrom) <= 512) ?
                                                         ((unsigned) fileSize - startFrom) : 512);
 
                             char *dataBytes = new char[leftToRead];
                             stream.read(dataBytes, leftToRead);
                             stream.close();
+
+                            //creqte
                             char blockNumArr[2];
                             shortToBytes(blockNum + 1, blockNumArr);
                             char opCodeArr[2];
@@ -134,7 +136,6 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                             std::cout << "WRQ " << _handler.getFileName() << " complete" << std::endl;
                         }
                     } else {
-                        std::cout << "Failed to open: " << _handler.getFileName() << std::endl;
 
                     }
                     break;
@@ -144,9 +145,6 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     short blockNum = (static_cast<ACKPacket *>(packetFromServer))->getBlockNum();
                     if (blockNum == 0) {
                         (static_cast<ACKPacket *>(packetFromServer))->printACK();
-                    } else {
-                        //todo replace
-                        std::cout << "Wrong Ack Block Number inside server listener" << std::endl;
                     }
                     break;
                 }

@@ -3,6 +3,9 @@
 DATAPacket::DATAPacket(short size, short block, char *bytes):data(bytes),blockNum(block),packetSize(size) {
     this->opCode = 3;
 }
+DATAPacket::DATAPacket(const DATAPacket &dATAPacket):packetSize(dATAPacket.packetSize),
+                                                     blockNum(dATAPacket.blockNum),
+                                                     data(dATAPacket.data){}
 
 DATAPacket::DATAPacket(short opCode, short size, short block, char* bytes):data(bytes),
                                                                            blockNum(block),packetSize(size) {

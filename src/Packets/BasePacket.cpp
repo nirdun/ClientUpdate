@@ -8,4 +8,5 @@ short BasePacket::getOpCode() {
 BasePacket::BasePacket() {
 }
 BasePacket::~BasePacket() {}
+BasePacket::BasePacket(const BasePacket &basePacket):opCode(basePacket.opCode) {}
 

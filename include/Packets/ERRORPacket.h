@@ -7,6 +7,7 @@ class ERRORPacket : public BasePacket {
 private:
     std::string ErrMsg;
     short ErrorCode;
+    ERRORPacket(const ERRORPacket &eRRORPacket);
 
     void defineErrMsg();
 

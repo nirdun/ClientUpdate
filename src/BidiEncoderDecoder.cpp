@@ -12,6 +12,9 @@
 
 #include <sstream>
 #include <boost/lexical_cast.hpp>
+#include <fstream>
+#include <iostream>
+
 
 using namespace std;
 
@@ -20,8 +23,15 @@ BidiEncoderDecoder::BidiEncoderDecoder() :
         _opCode(0),
         _block(0),
         _packetSize(0),
-        _counterRead(0),fileName(){
+        _counterRead(0), fileName() {
 }
+
+BidiEncoderDecoder::BidiEncoderDecoder(const BidiEncoderDecoder &encodeDecode) : _opCode(encodeDecode._opCode),
+                                                                                 _block(encodeDecode._block),
+                                                                                 _packetSize(encodeDecode._packetSize),
+                                                                                 _counterRead(
+                                                                                         encodeDecode._counterRead),
+                                                                                 fileName(encodeDecode.fileName) {}
 
 BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
     //char opCodearr;
@@ -66,7 +76,7 @@ BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
 
 std::string BidiEncoderDecoder::bytesToString(char bytes[]) {
     //return std::string(bytes);
-    return std::string (bytes);
+    return std::string(bytes);
 
 
 }
@@ -87,6 +97,20 @@ void BidiEncoderDecoder::shortToBytes(short num, char *bytesArr) {
     bytesArr[1] = (num & 0xFF);
 }
 
+
+bool BidiEncoderDecoder::fileExist(string name) {
+
+    string tmpName = "./" + name;
+
+    ifstream ifStream;
+    ifStream.open(tmpName);
+
+    bool success = ifStream.is_open();
+    if (success)
+        ifStream.close();
+    return success;
+}
+
 std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     std::vector<std::string> lineSplited;
     boost::split(lineSplited, line, boost::is_any_of(" "));
@@ -103,31 +127,35 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
     if (lineSplited.size() > 1) {
         it++;
         //line splited.at(1)
-         str = it->data();
+        str = it->data();
     }
     if (request == "RRQ") {
-        this->fileName = str;
 
-        shortToBytes((short)1, opCodeBytes);
+
+        shortToBytes((short) 1, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
         //inssert file name as chars
         std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
         bytesVec.push_back('\0');
 
     } else if (request == "WRQ") {
-        BidiEncoderDecoder::fileName = str;
-//        bytes = new char[this->fileName.length() + 3];
-        shortToBytes((short) 2, opCodeBytes);
-        arrayToVector(&bytesVec, opCodeBytes, 2);
-        std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
-        bytesVec.push_back('\0');
+        if (fileExist(str)&&lineSplited.size()>1) {
+            this->fileName = str;
+            shortToBytes((short) 2, opCodeBytes);
+
+            arrayToVector(&bytesVec, opCodeBytes, 2);
+            std::copy(fileName.begin(), fileName.end(), std::back_inserter(bytesVec));
+            bytesVec.push_back('\0');
+        }else{
+        }
+
     } else if (request == "ACK") {
         //todo disc shoult termintae
         shortToBytes((short) 4, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
         short block = boost::lexical_cast<short>(str);
         char blockNumArr[2];
-        shortToBytes(block,blockNumArr);
+        shortToBytes(block, blockNumArr);
         arrayToVector(&bytesVec, blockNumArr, 2);
 
 //        std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
@@ -152,8 +180,6 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         arrayToVector(&bytesVec, opCodeBytes, 2);
 
     } else {
-        std::cout << "wrong input"<<std::endl;
-
     }
     return bytesVec;
 
@@ -197,3 +223,4 @@ short BidiEncoderDecoder::bytesToShort(char a, char b) {
 BidiEncoderDecoder::~BidiEncoderDecoder() {
 
 }
+
