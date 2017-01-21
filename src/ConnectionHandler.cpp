@@ -31,11 +31,6 @@ ConnectionHandler::ConnectionHandler(ConnectionHandler &connectionHandler) :
         socket_(io_service_),
         _currentAction(0),
         _connected(true), encoderDecoder() {
-    currentActionMap["regular"] = 1;
-    currentActionMap["download"] = 2;
-    currentActionMap["upload"] = 3;
-    currentActionMap["dirlist"] = 4;
-    currentActionMap["diconnect"] = 5;
 
 }
 
