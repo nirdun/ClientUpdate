@@ -19,7 +19,7 @@ ConnectionHandler::ConnectionHandler(string host, short port) :
         io_service_(),
         socket_(io_service_),
         _currentAction(0),
-        _connected(true) {
+        _connected(true),loggedIn(false) {
     encoderDecoder = new BidiEncoderDecoder();
 
 }
@@ -31,22 +31,22 @@ ConnectionHandler::ConnectionHandler(ConnectionHandler &connectionHandler) :
         socket_(io_service_),
         _currentAction(0),
         _connected(true),
-        encoderDecoder() {
+        encoderDecoder() ,loggedIn(false){
 
 }
-ConnectionHandler& ConnectionHandler::operator = (const ConnectionHandler &connectionHandler){
-    if(this == &connectionHandler){
-        return *this;
-    }
-    host_ = connectionHandler.host_;
-    port_ = connectionHandler.port_;
-    io_service_=connectionHandler.io_service_;
-    socket_ = connectionHandler.socket_;
-    _currentAction=connectionHandler._currentAction;
-    _connected=connectionHandler._connected;
-    encoderDecoder = connectionHandler.encoderDecoder;
-
-}
+//ConnectionHandler& ConnectionHandler::operator = (const ConnectionHandler &connectionHandler){
+//    if(this == &connectionHandler){
+//        return *this;
+//    }
+//    host_ = connectionHandler.host_;
+//    port_ = connectionHandler.port_;
+//    io_service_=connectionHandler.io_service_;
+//    socket_ = connectionHandler.socket_;
+//    _currentAction=connectionHandler._currentAction;
+//    _connected=connectionHandler._connected;
+//    encoderDecoder = connectionHandler.encoderDecoder;
+//
+//}
 
 std::string ConnectionHandler::getHost() {
     return host_;
@@ -78,12 +78,9 @@ ConnectionHandler::~ConnectionHandler() {
 }
 
 bool ConnectionHandler::connect() {
-    std::cout << "Starting connect to "
-              << host_ << ":" << port_ << std::endl;
     try {
         tcp::endpoint endpoint(boost::asio::ip::address::from_string(host_), port_); // the server endpoint
         boost::system::error_code error;
-        std::cout << "trying to connect to socket" << std::endl;
         socket_.connect(endpoint, error);
         if (error)
             throw boost::system::system_error(error);
@@ -233,6 +230,9 @@ BasePacket *ConnectionHandler::processServerPakect() {
             mergeArrays(packetToDecode, blockNumberACK, 2, 2);
 //            short blockNumber = encoderDecoder->bytesToShort(blockNumberACK[0], blockNumberACK[1]);
             packetFromServer = encoderDecoder->decodeBytes(packetToDecode, 4);
+            if(_currentAction==7){
+                loggedIn=true;
+            }
             break;
         }
             //ERROR
@@ -310,4 +310,8 @@ void ConnectionHandler::updateCurrentAction(char *bytes) {
     }
 
 
+}
+
+bool ConnectionHandler::isLoggedIn(){
+    return loggedIn;
 }

@@ -16,11 +16,14 @@ void KeyBoardListener::run() {
         std::cin.getline(buf, _bufferSize);
 
         std::string line(buf);
-        disconnectedReq = line == "DISC";
         if (!_handler.encodeAndSend(line)) {
             //todo check if should sync
             std::cout << "something went wrong whilee sending... \n" << std::endl;
             continue;
+        }
+        if(_handler.isLoggedIn()){
+            disconnectedReq = line == "DISC";
+
         }
 // connectionHandler.sendLine(line) appends '\n' to the message. Therefor we send len+1 bytes.
         //todo delete prints

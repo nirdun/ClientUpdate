@@ -140,7 +140,6 @@ std::vector<char> BidiEncoderDecoder::encodeInputTobytes(std::string line) {
         shortToBytes((short) 7, opCodeBytes);
         arrayToVector(&bytesVec, opCodeBytes, 2);
         std::copy(str.begin(), str.end(), std::back_inserter(bytesVec));
-
         bytesVec.push_back('\0');
     } else if (request == "DELRQ") {
         this->fileName = str;

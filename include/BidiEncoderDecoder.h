@@ -19,7 +19,6 @@ private:
     int _counterRead;
     std::string fileName;
 
-
     void shortToBytes(short num, char *bytesArr);
     char * getPartOfByteArray(char bytes[], int from, int to);
 

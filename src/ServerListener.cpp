@@ -69,6 +69,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                 std::string blockString = to_string(blockNumber);
                 _handler.encodeAndSend("ACK " + blockString);
                 if (dataSize < 512) {
+                    dataFromServer.clear();
                     std::cout << "RRQ " << currFileName << " complete" << std::endl;
                 }
                 delete (data);

@@ -20,13 +20,12 @@ private:
     short port_;
     boost::asio::io_service io_service_;   // Provides core I/O functionality
     tcp::socket socket_;
+    bool loggedIn;
 
-private:
-    //std::map <std::string, int> _currentActionMap;
     BidiEncoderDecoder* encoderDecoder;
 
 public:
-    ConnectionHandler& operator = (const ConnectionHandler &connectionHandler);
+//    ConnectionHandler& operator = (const ConnectionHandler &connectionHandler);
     ConnectionHandler(ConnectionHandler& connectionHandler);
     std::string getHost();
     short getPort();
@@ -83,6 +82,8 @@ public:
     std::vector<char>getBytesUntilDelimeter();
 
     void updateCurrentAction(char *bytes);
+
+    bool isLoggedIn();
 };
 
 

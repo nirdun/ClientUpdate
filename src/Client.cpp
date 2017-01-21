@@ -25,11 +25,11 @@ int main(int argc, char *argv[]) {
 
 
 
-    ConnectionHandler handler(host,port);
-    KeyBoardListener KeyBoardListener(handler);
-    ServerListener serverListener(handler);
+    ConnectionHandler* handler=new ConnectionHandler(host,port);
+    KeyBoardListener KeyBoardListener(*handler);
+    ServerListener serverListener(*handler);
 
-    if (!handler.connect()) {
+    if (!handler->connect()) {
         std::cerr << "Cannot connect to " << host << ":" << port << std::endl;
         return 1;
     }
