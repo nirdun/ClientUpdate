@@ -2,16 +2,12 @@
 #include "../../include/Packets/BCASTPacket.h"
 
 
-BCASTPacket::BCASTPacket(char addOrDelete, const std::string &filename):Filename(filename) {
+BCASTPacket::BCASTPacket(char addOrDelete, const std::string &filename):Filename(filename),fileAdded(false) {
     this->opCode = 9;
     this->fileAdded = addOrDelete == (short)1 ? true : false;
 
 }
 
-BCASTPacket::BCASTPacket(const std::string &filename):Filename(filename) {
-    this->opCode = 9;
-
-}
 
 BCASTPacket::~BCASTPacket() {}
 void BCASTPacket::printMessage() {
