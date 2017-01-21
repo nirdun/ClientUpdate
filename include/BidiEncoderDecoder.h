@@ -1,6 +1,4 @@
-//
-// Created by ניר דוניץ on 16.1.2017.
-//
+
 #pragma once
 #ifndef BIDIENCODERDECODER_H
 #define BIDIENCODERDECODER_H
