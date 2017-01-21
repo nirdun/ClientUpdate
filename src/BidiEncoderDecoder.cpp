@@ -10,34 +10,17 @@
 #include "../include/Packets/BCASTPacket.h"
 
 
-#include <string>
-#include <vector>
-#include <iostream>
 #include <sstream>
-#include <string.h>
-#include <iterator>
-#include <algorithm>
 #include <boost/lexical_cast.hpp>
 
 using namespace std;
+
 
 BidiEncoderDecoder::BidiEncoderDecoder() :
         _opCode(0),
         _block(0),
         _packetSize(0),
-        _counterRead(0){
-    byteArr = std::vector<char>(1024);
-    opCodeMap.clear();
-    opCodeMap["RRQ"] = 1;
-    opCodeMap["WRQ"] = 2;
-    opCodeMap["DATA"] = 3;
-    opCodeMap["ACK"] = 4;
-    opCodeMap["ERROR"] = 5;
-    opCodeMap["DIRQ"] = 6;
-    opCodeMap["LOGRQ"] = 7;
-    opCodeMap["DELRQ"] = 8;
-    opCodeMap["BCAST"] = 9;
-    opCodeMap["DISC"] = 10;
+        _counterRead(0),fileName(){
 }
 
 BasePacket *BidiEncoderDecoder::decodeBytes(char *bytes, int lengthOfArray) {
@@ -197,7 +180,6 @@ void BidiEncoderDecoder::arrayToVector(std::vector<char> *v, char *arr, int size
 
 
 void BidiEncoderDecoder::vectorToArray(std::vector<char> vector, char *arr) {
-    std::vector<char>::iterator it;
     int i = 0;
     for (std::vector<char>::iterator it = vector.begin(); it != vector.end(); ++it) {
 

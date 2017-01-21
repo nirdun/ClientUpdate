@@ -17,21 +17,10 @@ private:
     short _packetSize;
     short _block;
     int _counterRead;
-    std::vector<char> byteArr;
     std::string fileName;
 
 
-    std::map<std::string, short> opCodeMap;
-
-
-    DATAPacket *createDataPacket();
-
-//    static Set<int> *const haveEndByte = std::unordered_set<int>(Arrays::asList(1,1 2, 5, 7, 8, 9));
-    std::vector<char> encode(BasePacket *packet);
-
-    std::vector<char> encodeDataPacket(DATAPacket *dpacket);
     void shortToBytes(short num, char *bytesArr);
-    std::vector<char> encodeERROR(ERRORPacket *dpacket);
     char * getPartOfByteArray(char bytes[], int from, int to);
 
 
@@ -49,7 +38,6 @@ public:
     void arrayToVector(std::vector<char> *v,char* arr,int size);
     std::vector<char> encodeInputTobytes(std::string line);
 
-//    void addStringToBytes(std::string basic_string, char bytes[], int i);
 };
 
 #endif //BIDIENCODERDECODER_H
