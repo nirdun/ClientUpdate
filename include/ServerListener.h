@@ -22,8 +22,13 @@ public:
 
     void createResponse(BasePacket *packet);
 
+    virtual ~ServerListener();
+
 };
 
+ServerListener::~ServerListener() {
+
+}
 
 
 #endif //CLIENT_SERVERLISTENER_H

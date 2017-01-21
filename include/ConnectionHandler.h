@@ -25,7 +25,7 @@ private:
     BidiEncoderDecoder* encoderDecoder;
 
 public:
-//    ConnectionHandler& operator = (const ConnectionHandler &connectionHandler);
+    ConnectionHandler& operator = (const ConnectionHandler &connectionHandler);
     ConnectionHandler(ConnectionHandler& connectionHandler);
     std::string getHost();
     short getPort();

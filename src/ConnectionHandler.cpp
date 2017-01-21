@@ -34,19 +34,10 @@ ConnectionHandler::ConnectionHandler(ConnectionHandler &connectionHandler) :
         encoderDecoder() ,loggedIn(false){
 
 }
-//ConnectionHandler& ConnectionHandler::operator = (const ConnectionHandler &connectionHandler){
-//    if(this == &connectionHandler){
-//        return *this;
-//    }
-//    host_ = connectionHandler.host_;
-//    port_ = connectionHandler.port_;
-//    io_service_=connectionHandler.io_service_;
-//    socket_ = connectionHandler.socket_;
-//    _currentAction=connectionHandler._currentAction;
-//    _connected=connectionHandler._connected;
-//    encoderDecoder = connectionHandler.encoderDecoder;
-//
-//}
+
+ConnectionHandler& ConnectionHandler::operator = (const ConnectionHandler &connectionHandler){
+        return *this;
+}
 
 std::string ConnectionHandler::getHost() {
     return host_;

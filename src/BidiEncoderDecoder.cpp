@@ -193,3 +193,7 @@ short BidiEncoderDecoder::bytesToShort(char a, char b) {
     result += (short) (b & 0xff);
     return result;
 }
+
+BidiEncoderDecoder::~BidiEncoderDecoder() {
+
+}

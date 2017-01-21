@@ -10,6 +10,10 @@
 
 class KeyBoardListener {
 private:
+public:
+    virtual ~KeyBoardListener();
+
+private:
     ConnectionHandler &_handler;
     const short _bufferSize;
     bool disconnectedReq;

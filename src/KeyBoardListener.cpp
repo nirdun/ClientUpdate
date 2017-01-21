@@ -29,3 +29,7 @@ void KeyBoardListener::run() {
 
     }
 }
+
+KeyBoardListener::~KeyBoardListener() {
+
+}
