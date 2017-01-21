@@ -12,11 +12,10 @@
 class ServerListener {
 private:
 
-    std::string _listenerType;
     ConnectionHandler &_handler;
     std::vector<char> dataFromServer;
     void shortToBytes(short num, char *bytesArr);
-    bool disconnedReq;
+    bool disconnectedReq;
 public:
     ServerListener(ConnectionHandler& handler);
     void run();
@@ -25,11 +24,6 @@ public:
 
     void recievingData(std::vector<char> vector);
 };
-
-
-
-
-
 
 
 

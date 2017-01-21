@@ -5,17 +5,11 @@
 
 #include <boost/thread/pthread/thread_data.hpp>
 #include "../include/ServerListener.h"
-#include "../include/BidiEncoderDecoder.h"
-#include "../include/Packets/BasePacket.h"
 #include "../include/Packets/BCASTPacket.h"
-#include "../include/Packets/ERRORPacket.h"
 #include "../include/Packets/ACKPacket.h"
 #include "../include/Packets/DATAPacket.h"
 #include <fstream>
-#include <sstream>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 
 using std::ifstream;
 using std::ofstream;
@@ -30,13 +24,12 @@ using namespace std;
 
 ServerListener::ServerListener(ConnectionHandler &handler) :
         _handler(handler),
-        _listenerType("server"), disconnedReq(false) {
+         disconnectedReq(false),dataFromServer(){
 
 }
 
 void ServerListener::run() {
-    BidiEncoderDecoder *encoderDecoder;
-    while (!_handler.shouldTerminate() && !disconnedReq) {
+    while (!_handler.shouldTerminate() && !disconnectedReq) {
         BasePacket *packetFromServer;
 
         packetFromServer = _handler.processServerPakect();
@@ -134,7 +127,7 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                             _handler.mergeArrays(dataBytesPacket, blockNumArr, 2, 4);
                             _handler.mergeArrays(dataBytesPacket, dataBytes, leftToRead, 6);
                             _handler.sendBytes(dataBytesPacket, leftToRead + 6);
-                            delete (dataBytes);
+                            delete []dataBytes;
                         } else {
                             std::cout << "WRQ " << _handler.getFileName() << " complete" << std::endl;
                         }
@@ -174,9 +167,11 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
                     } else {
                         std::cout << "cant disconnect" << std::endl;
                     }
-                    disconnedReq = true;
+                    disconnectedReq = true;
                     break;
                 }
+                defualt:
+                    break;
             }
             break;
             //todo check if you can do something while uploading
@@ -193,6 +188,8 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
             static_cast<BCASTPacket *> (packetFromServer)->printMessage();
             break;
         }
+        defualt:
+            break;
     }
 }
 
