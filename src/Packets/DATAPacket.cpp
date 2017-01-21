@@ -1,17 +1,12 @@
 #include "../../include/Packets/DATAPacket.h"
 
-DATAPacket::DATAPacket(short size, short block, char *bytes) {
+DATAPacket::DATAPacket(short size, short block, char *bytes):data(bytes),blockNum(block),packetSize(size) {
     this->opCode = 3;
-    this->data = bytes;
-    this->blockNum=block;
-    this->packetSize=size;
 }
 
-DATAPacket::DATAPacket(short opCode, short size, short block, char* bytes) {
+DATAPacket::DATAPacket(short opCode, short size, short block, char* bytes):data(bytes),
+                                                                           blockNum(block),packetSize(size) {
     this->opCode = opCode;
-    this->data = bytes;
-    this->blockNum=block;
-    this->packetSize=size;
 }
 
 short DATAPacket::getPacketSize() {
@@ -29,3 +24,4 @@ char* DATAPacket::getData() {
     //todo - clone?
     return data;
 }
+DATAPacket::~DATAPacket() {}

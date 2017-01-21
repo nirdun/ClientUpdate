@@ -7,5 +7,6 @@ class DISCPacket : public BasePacket {
 
 public:
     DISCPacket();
+    virtual ~DISCPacket();
 };
 

@@ -38,7 +38,7 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 
 endif()
-set(SOURCE_FILES src/BidiEncoderDecoder.cpp include/BidiEncoderDecoder.h src/Client.cpp src/ConnectionHandler.cpp include/ConnectionHandler.h src/KeyBoardListener.cpp include/KeyBoardListener.h src/ServerListener.cpp include/ServerListener.h src/Packets/DATAPacket.cpp include/Packets/DATAPacket.h src/Packets/ACKPacket.cpp include/Packets/ACKPacket.h src/Packets/BasePacket.cpp include/Packets/BasePacket.h src/Packets/BCASTPacket.cpp include/Packets/BCASTPacket.h src/Packets/DELRQPacket.cpp include/Packets/DELRQPacket.h src/Packets/DIRQPacket.cpp include/Packets/DIRQPacket.h src/Packets/DISCPacket.cpp include/Packets/DISCPacket.h src/Packets/ERRORPacket.cpp include/Packets/ERRORPacket.h src/Packets/LOGRQPacket.cpp include/Packets/LOGRQPacket.h)
+set(SOURCE_FILES src/BidiEncoderDecoder.cpp include/BidiEncoderDecoder.h src/Client.cpp src/ConnectionHandler.cpp include/ConnectionHandler.h src/KeyBoardListener.cpp include/KeyBoardListener.h src/ServerListener.cpp include/ServerListener.h src/Packets/DATAPacket.cpp include/Packets/DATAPacket.h src/Packets/ACKPacket.cpp include/Packets/ACKPacket.h src/Packets/BasePacket.cpp include/Packets/BasePacket.h src/Packets/BCASTPacket.cpp include/Packets/BCASTPacket.h src/Packets/DISCPacket.cpp include/Packets/DISCPacket.h src/Packets/ERRORPacket.cpp include/Packets/ERRORPacket.h)
 add_executable(ClientAss3 ${SOURCE_FILES})
 
 if(Boost_FOUND)

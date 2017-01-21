@@ -1,16 +1,18 @@
 #include <iostream>
 #include "../../include/Packets/ERRORPacket.h"
 
-ERRORPacket::ERRORPacket(short errorType):opCode(5),ErrorCode(errorType),ErrMsg("") {
-    difineErrMsg();
+ERRORPacket::ERRORPacket(short errorType):ErrorCode(errorType),ErrMsg("") {
+    this->opCode=5;
+    defineErrMsg();
 }
 ERRORPacket::~ERRORPacket(){}
 
 
-ERRORPacket::ERRORPacket(short errorType, const std::string &errMsg):opCode(5),ErrorCode(errorType),ErrMsg(errMsg) {
+ERRORPacket::ERRORPacket(short errorType, const std::string &errMsg):ErrorCode(errorType),ErrMsg(errMsg) {
+    this->opCode=5;
 }
 
-void ERRORPacket::difineErrMsg() {
+void ERRORPacket::defineErrMsg() {
     switch (ErrorCode) {
         case 0:
             ErrMsg = "Not defined, see error message (if any).";

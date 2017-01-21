@@ -2,14 +2,12 @@
 #include "../../include/Packets/ACKPacket.h"
 
 
-ACKPacket::ACKPacket() {
+ACKPacket::ACKPacket():blockNum(0) {
     this->opCode = 4;
-    this->blockNum = 0;
 }
 
-ACKPacket::ACKPacket(short blockNum) {
+ACKPacket::ACKPacket(short blockNum):blockNum(blockNum) {
     this->opCode = 4;
-    this->blockNum = blockNum;
 }
 
 short ACKPacket::getBlockNum() {
@@ -19,3 +17,5 @@ short ACKPacket::getBlockNum() {
 void ACKPacket::printACK() {
     std::cout << "ACK " << blockNum << std::endl;
 }
+
+ACKPacket::~ACKPacket() {}

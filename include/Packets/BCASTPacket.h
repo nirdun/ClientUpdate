@@ -8,19 +8,15 @@
 class BCASTPacket : public BasePacket {
 private:
     std::string Filename;
-    bool fileAdded = false;
+    bool fileAdded ;
 
 public:
     BCASTPacket(char addOrDelete, const std::string &filename);
 
     BCASTPacket(const std::string &filename);
 
-    //todo initiailize while getting bytes.
-     std::string getFileName();
 
-
-
-
+    virtual ~BCASTPacket();
     void printMessage();
 
 };

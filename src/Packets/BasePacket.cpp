@@ -7,4 +7,5 @@ short BasePacket::getOpCode() {
 
 BasePacket::BasePacket() {
 }
+BasePacket::~BasePacket() {}
 
