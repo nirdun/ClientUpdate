@@ -7,7 +7,6 @@
 #include "../include/ServerListener.h"
 #include "../include/Packets/BCASTPacket.h"
 #include "../include/Packets/ACKPacket.h"
-#include "../include/Packets/DATAPacket.h"
 #include <fstream>
 #include <boost/filesystem/operations.hpp>
 
@@ -24,8 +23,8 @@ using namespace std;
 
 ServerListener::ServerListener(ConnectionHandler &handler) :
         _handler(handler),
-         dataFromServer() {
-    disconnectedReq==false;
+        dataFromServer() {
+    disconnectedReq = false;
 
 }
 
@@ -188,16 +187,13 @@ void ServerListener::createResponse(BasePacket *packetFromServer) {
             static_cast<BCASTPacket *> (packetFromServer)->printMessage();
             break;
         }
-        defualt:
+        default:
             break;
     }
+
 }
 
 void ServerListener::shortToBytes(short num, char *bytesArr) {
     bytesArr[0] = ((num >> 8) & 0xFF);
     bytesArr[1] = (num & 0xFF);
-}
-
-void ServerListener::recievingData(std::vector<char> vector) {
-
 }
