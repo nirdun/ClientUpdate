@@ -11,4 +11,5 @@ public:
     BasePacket();
 
     BasePacket(const BasePacket&);
+    virtual ~BasePacket();
 };

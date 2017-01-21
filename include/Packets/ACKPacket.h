@@ -16,4 +16,5 @@ public:
      short getBlockNum();
 
     void printACK();
+    virtual ~ACKPacket();
 };

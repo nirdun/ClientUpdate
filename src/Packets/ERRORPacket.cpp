@@ -1,16 +1,13 @@
 #include <iostream>
 #include "../../include/Packets/ERRORPacket.h"
 
-ERRORPacket::ERRORPacket(short errorType) {
-    this->opCode = 5;
-    this->ErrorCode = errorType;
+ERRORPacket::ERRORPacket(short errorType):opCode(5),ErrorCode(errorType),ErrMsg("") {
     difineErrMsg();
 }
+ERRORPacket::~ERRORPacket(){}
 
-ERRORPacket::ERRORPacket(short errorType, const std::string &errMsg) {
-    this->opCode = 5;
-    this->ErrorCode = errorType;
-    this->ErrMsg = errMsg;
+
+ERRORPacket::ERRORPacket(short errorType, const std::string &errMsg):opCode(5),ErrorCode(errorType),ErrMsg(errMsg) {
 }
 
 void ERRORPacket::difineErrMsg() {
@@ -45,13 +42,6 @@ void ERRORPacket::difineErrMsg() {
 
     }
 }
-
-
-//todo this
-
-//short ERRORPacket::getErrorCode() {
-//    return ErrorCode;
-//}
 
 
 void ERRORPacket::printError() {
