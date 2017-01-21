@@ -30,15 +30,23 @@ ConnectionHandler::ConnectionHandler(ConnectionHandler &connectionHandler) :
         io_service_(),
         socket_(io_service_),
         _currentAction(0),
-        _connected(true), encoderDecoder() {
-    currentActionMap["regular"] = 1;
-    currentActionMap["download"] = 2;
-    currentActionMap["upload"] = 3;
-    currentActionMap["dirlist"] = 4;
-    currentActionMap["diconnect"] = 5;
+        _connected(true),
+        encoderDecoder() {
 
 }
+ConnectionHandler& ConnectionHandler::operator = (const ConnectionHandler &connectionHandler){
+    if(this == &connectionHandler){
+        return *this;
+    }
+    host_ = connectionHandler.host_;
+    port_ = connectionHandler.port_;
+    io_service_=connectionHandler.io_service_;
+    socket_ = connectionHandler.socket_;
+    _currentAction=connectionHandler._currentAction;
+    _connected=connectionHandler._connected;
+    encoderDecoder = connectionHandler.encoderDecoder;
 
+}
 std::string ConnectionHandler::getHost() {
     return host_;
 
@@ -304,4 +312,8 @@ void ConnectionHandler::updateCurrentAction(char *bytes) {
     }
 
 
+}
+
+tcp::socket &ConnectionHandler::getSocket_() {
+    return socket_;
 }

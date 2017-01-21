@@ -16,18 +16,20 @@ class ConnectionHandler {
 private:
     short _currentAction;
     bool _connected;
-    const std::string host_;
-    const short port_;
+    std::string host_;
+    short port_;
     boost::asio::io_service io_service_;   // Provides core I/O functionality
     tcp::socket socket_;
+
+private:
     //std::map <std::string, int> _currentActionMap;
     BidiEncoderDecoder* encoderDecoder;
 
 public:
+    ConnectionHandler& operator = (const ConnectionHandler &connectionHandler);
     ConnectionHandler(ConnectionHandler& connectionHandler);
     std::string getHost();
     short getPort();
-
     std::string getFileName();
     ConnectionHandler(const ConnectionHandler &handler);
     void setCurrentAction(short currentAction);
